@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Downloadable font for Suez One.
+    To use bundled fonts instead, place suez_one.ttf in this folder
+    and update Type.kt: Font(R.font.suez_one)
+-->
+<font-family xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:fontProviderAuthority="com.google.android.gms.fonts"
+    app:fontProviderPackage="com.google.android.gms"
+    app:fontProviderQuery="Suez One"
+    app:fontProviderCerts="@array/com_google_android_gms_fonts_certs">
+</font-family>

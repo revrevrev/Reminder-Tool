@@ -1,0 +1,28 @@
+# Gradle
+.gradle/
+build/
+**/build/
+
+# Local config (contains SDK path, not for sharing)
+local.properties
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+
+# Android APK/AAB artifacts
+*.apk
+*.aab
+*.ap_
+
+# Keystore files
+*.jks
+*.keystore
+
+# ProGuard mapping
+mapping.txt
+*.mapping
+
+# Logs
+*.log

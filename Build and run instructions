@@ -1,0 +1,4 @@
+.\build.ps1
+
+
+adb install -r "C:\Playground\Tools\Reminder tool\app\build\outputs\apk\debug\app-debug.apk"
