@@ -1,0 +1,25 @@
+## MANDATORY - Read this first. no exceptions
+
+**STOP. Do NOT read source files or touch any fix code until step 2 is done.**
+
+1. Write the regression test first — exercises the broken behavior (what the user experienced going wrong).
+2. Run it — it **must FAIL**. If it passes, the test is wrong; revise it before proceeding.
+3. Only now read source files and implement the fix.
+4. Run the test again — it must now PASS.
+
+**Why:** A defect means there was no test guarding that behavior. Writing the test first proves it catches the real bug and isn't accidentally passing due to the fix already being in place. Skipping this makes the test worthless — it may pass regardless of whether the bug is fixed.
+
+Note: After fixing a defect, move it under Ready for Testing. Never move it under Manually verified, that's for me to do!
+## ##########################################
+
+## Active
+2. The android bottom bar (with the 3 buttons for apps,home,back) is hiding some of the bottom buttons of this app. I want the screen not to span below these buttons.
+3. When creating a new reminder, the keyboard is hiding the control so the user can't see what he is typing.
+
+## ❔Ready for Testing
+1. When trying to pick a different sound for a reminder or a category, the app crashes.
+
+## ❌ Failed in retest
+
+
+## ✔️Manually verified
