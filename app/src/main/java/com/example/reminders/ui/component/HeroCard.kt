@@ -84,7 +84,7 @@ fun HeroCard(
                     ) {
                         Icon(Icons.Outlined.Check, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(Modifier.width(6.dp))
-                        Text("סיימתי", style = AppTypography.labelLarge)
+                        Text("בוצע", style = AppTypography.labelLarge)
                     }
                     Button(
                         onClick = onPauseResume,

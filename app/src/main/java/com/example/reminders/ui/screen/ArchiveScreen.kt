@@ -49,7 +49,7 @@ fun ArchiveScreen(
             if (state.reminders.isEmpty()) {
                 item {
                     Text(
-                        "הארכיון ריק. כשמסמנים תזכורת חד-פעמית כ„סיימתי”, היא עוברת לכאן.",
+                        "הארכיון ריק. כשמסמנים תזכורת חד-פעמית כ„בוצע”, היא עוברת לכאן.",
                         style = AppTypography.bodyMedium,
                         color = Neutral700,
                         modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)

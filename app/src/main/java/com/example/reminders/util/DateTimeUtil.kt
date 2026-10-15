@@ -7,6 +7,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalAdjusters
 
 object DateTimeUtil {
@@ -141,6 +142,20 @@ object DateTimeUtil {
 
     fun todayDateString(): String = LocalDate.now().toString()
     fun tomorrowDateString(): String = LocalDate.now().plusDays(1).toString()
+
+    fun isInPast(date: String, time: String): Boolean {
+        val dt = LocalDateTime.of(LocalDate.parse(date), LocalTime.parse(time))
+        return dt.isBefore(LocalDateTime.now())
+    }
+
+    fun nextRoundHour(after: LocalDateTime = LocalDateTime.now()): LocalDateTime =
+        after.truncatedTo(ChronoUnit.HOURS).plusHours(1)
+
+    fun nextRoundHourDateString(after: LocalDateTime = LocalDateTime.now()): String =
+        nextRoundHour(after).toLocalDate().toString()
+
+    fun nextRoundHourTimeString(after: LocalDateTime = LocalDateTime.now()): String =
+        "%02d:00".format(nextRoundHour(after).hour)
 
     private fun shortHebrewDow(day: Int) = when (day) { // 0=Sun
         0 -> "א"; 1 -> "ב"; 2 -> "ג"; 3 -> "ד"; 4 -> "ה"; 5 -> "ו"; else -> "ש"

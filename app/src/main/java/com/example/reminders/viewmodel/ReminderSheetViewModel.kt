@@ -19,9 +19,9 @@ data class ReminderDraft(
     val id: Int = 0,
     val name: String = "",
     val type: ReminderType = ReminderType.ONCE,
-    val date: String = DateTimeUtil.todayDateString(),
+    val date: String = DateTimeUtil.nextRoundHourDateString(),
     val day: Int? = null,
-    val time: String = "09:00",
+    val time: String = DateTimeUtil.nextRoundHourTimeString(),
     val categoryId: Int? = null,
     val sound: String? = null,
     val volume: Int? = null,
@@ -29,7 +29,11 @@ data class ReminderDraft(
     val soundOverrideEnabled: Boolean = false
 )
 
-fun ReminderDraft.isValid() = name.isNotBlank() && categoryId != null
+fun ReminderDraft.isValid(): Boolean {
+    if (name.isBlank() || categoryId == null) return false
+    if (type == ReminderType.ONCE && DateTimeUtil.isInPast(date, time)) return false
+    return true
+}
 
 @HiltViewModel
 class ReminderSheetViewModel @Inject constructor(

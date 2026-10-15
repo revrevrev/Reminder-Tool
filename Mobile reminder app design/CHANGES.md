@@ -23,7 +23,7 @@ Goal: a fast, single-glance form where the keyboard never covers the field being
   1. Close: ghost round icon button, 38×38, X icon 16dp.
   2. Title "תזכורת חדשה" / "עריכת תזכורת": 14px/600, `neutral-700`. This is a small label, not a heading.
   3. (Edit only) Trash icon button, `accent-700`.
-  4. **Save "שמירה"**: primary pill button, padding 9×20, 15px. It moved here from the bottom of the form, so the keyboard can never hide it. Disabled (45% opacity) until a name and a category are set. The helper text that used to sit under the bottom Save button is removed.
+  4. **Save "שמירה"**: primary pill button, padding 9×20, 15px. It moved here from the bottom of the form, so the keyboard can never hide it. Disabled (45% opacity) until a name and a category are set; also disabled if the selected date + time is in the past for one-off reminders. The helper text that used to sit under the bottom Save button is removed.
 - **Field order:**
   1. **שם התזכורת** (Name): field label plus pill input, min-height 44, **16px** (16px also prevents zoom-on-focus on mobile). **No placeholder.** `enterkeyhint="done"`. It is the first field so it sits near the top of the screen, above the keyboard.
   2. **Type selector:** two-column grid, gap 8, with compact pills (radius 999, padding 9×12, 14px/600, 16dp icon + label, centered). Labels are only "חד-פעמית" and "שבועית"; the caption lines ("עוברת לארכיון בסיום" / "חוזרת ביום קבוע") are removed. Selected and unselected colors and rings are the same as in the README.

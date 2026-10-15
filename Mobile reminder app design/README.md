@@ -47,7 +47,7 @@ Top to bottom:
    - Name: heading font 32px, line-height 1.15.
    - Meta 14px: "היום ב-18:30 · חד-פעמית" or "… · כל יום רביעי".
    - If snoozed: extra 13/600 line "נודניק עד HH:MM".
-   - Actions row (margin-top 16, gap 8): **סיימתי** (Done) — bg `#f5ead8`, fg tone `btnFg`, check icon; **השהיה** (Pause) — bg tone `c2`, fg tone `pauseFg`, pause icon. Buttons padding 9×16, pill.
+   - Actions row (margin-top 16, gap 8): **בוצע** (Done) — bg `#f5ead8`, fg tone `btnFg`, check icon; **השהיה** (Pause) — bg tone `c2`, fg tone `pauseFg`, pause icon. Buttons padding 9×16, pill.
    - **Paused hero**: bg `neutral-300 #dcd3c4`, fg `neutral-800`, circles `neutral-200`/`neutral-400`, kicker "בהשהיה · לא תופעל", single action **המשך** (Resume) bg `accent-2-600 #728157`, fg bg.
 4. Section label "בהמשך" (Later) 12/600 `neutral-700`, padding 24/24/6.
 5. **List rows** (container padding 0 12; row padding 11×12, radius 22, gap 14; hover/press bg `surface` / `neutral-300`; tap = edit):
@@ -83,7 +83,7 @@ Fields in order (gap 16):
    - Turning off clears the override (reminder inherits again).
    - **Sound/volume are never shown when creating.**
 8. Notes: ghost button "+ הוספת הערה" reveals a textarea "הערות" (placeholder "פרטים נוספים…", min-height 70, radius 28). Shown expanded if the reminder already has notes.
-9. **שמירה** (Save) — primary block button, padding 15, 16px. Disabled (45% opacity) until name **and** category are set; helper below 12px: "יש להזין שם ולבחור קטגוריה" / "יש להזין שם" / "יש לבחור קטגוריה".
+9. **שמירה** (Save) — primary block button, padding 15, 16px. Disabled (45% opacity) until name **and** category are set; also disabled if the selected date + time is in the past for one-off reminders. Helper below 12px: "יש להזין שם ולבחור קטגוריה" / "יש להזין שם" / "יש לבחור קטגוריה".
 
 ### 4. Sound picker — bottom sheet (stacks above other sheets)
 Title "בחירת צליל" or "צליל לקטגוריה {name}"; ghost "סיום" (Done) button. Rows (padding 10×12, radius 22, gap 14): radio dot 20dp (selected: border + fill `accent` with 4dp inner bg gap; else border `neutral-400`), name 600 + description 12px `neutral-700`, optional tag "ברירת מחדל · {category}" (when picking for a reminder: marks the category's sound), round secondary play button (mirrored triangle). Selected row bg `accent-100`. Tapping a row selects **and** previews at the relevant volume; play button previews only.
@@ -99,7 +99,7 @@ Shown via full-screen intent / lock-screen activity.
 - Bottom panel (margin 12, bottom 28, bg `#f5ead8`, radius 32, padding 18/18/16, gap 12):
   - "נודניק" label + stepper (− value +), value "NN דק׳" heading 18px, 1–120 min, ±1.
   - Presets row 5 / 10 / 15 / 30 (selected `accent` fill / bg text; else surface). Initial value = Settings default snooze.
-  - Buttons: **נודניק** secondary (flex 1) and **סיימתי** primary (flex 1.6) — label "סיימתי · לארכיון" for one-offs.
+  - Buttons: **נודניק** secondary (flex 1) and **בוצע** primary (flex 1.6) — label "בוצע · לארכיון" for one-offs.
 - Sound loops (every ~2.6 s in prototype) until an action is taken.
 
 ### 6. Categories (קטגוריות)
@@ -118,7 +118,7 @@ Cards (gap 12):
 - **ארכיון** row (bottom) — archive icon, title, subtitle "N תזכורות חד-פעמיות שהושלמו" / "ריק", chevron → Archive. Deliberately low-prominence: the archive is a rarely-used escape hatch.
 
 ### 9. Archive (ארכיון)
-Ghost back button "› הגדרות", title "ארכיון", subtitle "תזכורות חד-פעמיות שהושלמו". Cards sorted by archive time desc: 12dp category dot, name with strikethrough (`neutral-500` line), meta "{date time} · הושלם {day}", secondary "שחזר" (Restore), trash icon `accent-700` (permanent delete, with undo toast). Empty: "הארכיון ריק. כשמסמנים תזכורת חד-פעמית כ„סיימתי”, היא עוברת לכאן."
+Ghost back button "› הגדרות", title "ארכיון", subtitle "תזכורות חד-פעמיות שהושלמו". Cards sorted by archive time desc: 12dp category dot, name with strikethrough (`neutral-500` line), meta "{date time} · הושלם {day}", secondary "שחזר" (Restore), trash icon `accent-700` (permanent delete, with undo toast). Empty: "הארכיון ריק. כשמסמנים תזכורת חד-פעמית כ„בוצע”, היא עוברת לכאן."
 
 ---
 
@@ -132,7 +132,7 @@ Ghost back button "› הגדרות", title "ארכיון", subtitle "תזכור
 - **Delete reminder** (editor trash / archive trash): immediate, toast + Undo.
 - **Undo** restores the previous reminders snapshot (single level).
 - **Effective sound/volume:** `reminder.sound ?? category.sound`, `reminder.volume ?? category.volume`. Category changes propagate to all inheriting reminders.
-- **Validation:** reminder needs non-blank name + category; category needs non-blank name. Cannot delete the last category.
+- **Validation:** reminder needs non-blank name + category; category needs non-blank name. Cannot delete the last category. For **one-off (חד-פעמית)** reminders, the selected date + time must not be in the past — Save is disabled if it is.
 - **Hover/press:** tints from the ramps (see components); keyboard focus = 2dp `accent` outline, 2dp offset.
 
 ## State Management
