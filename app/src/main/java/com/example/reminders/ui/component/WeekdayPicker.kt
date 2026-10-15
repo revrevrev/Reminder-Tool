@@ -12,9 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.example.reminders.ui.theme.*
-
-private val DAYS_RTL = listOf("ש׳", "ו׳", "ה׳", "ד׳", "ג׳", "ב׳", "א׳") // Sat..Sun displayed RTL
-private val DAY_INDICES = listOf(6, 5, 4, 3, 2, 1, 0) // 6=Sat..0=Sun
+import com.example.reminders.util.DateTimeUtil
 
 @Composable
 fun WeekdayPicker(
@@ -22,13 +20,13 @@ fun WeekdayPicker(
     onDaySelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val days = DateTimeUtil.weekdayPickerOrder()
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.Start)
     ) {
-        // In RTL layout, first item appears on the right, so we display Sat first (index 6) which renders rightmost
-        DAYS_RTL.forEachIndexed { i, label ->
-            val dayIndex = DAY_INDICES[i]
+        // In RTL layout, first item appears on the right. Sunday (א, index 0) is first.
+        days.forEach { (label, dayIndex) ->
             val selected = selectedDay == dayIndex
             Box(
                 modifier = Modifier

@@ -167,6 +167,12 @@ object DateTimeUtil {
         9 -> "ספטמבר"; 10 -> "אוקטובר"; 11 -> "נובמבר"; else -> "דצמבר"
     }
 
+    // Returns (label, dayIndex) pairs in the order they should appear in the WeekdayPicker.
+    // Index 0 renders on the right in RTL, so Sunday (א, index 0) must come first.
+    fun weekdayPickerOrder(): List<Pair<String, Int>> = listOf(
+        "א׳" to 0, "ב׳" to 1, "ג׳" to 2, "ד׳" to 3, "ה׳" to 4, "ו׳" to 5, "ש׳" to 6
+    )
+
     fun summaryPill(type: ReminderType, date: String?, day: Int?, time: String): String {
         return when (type) {
             ReminderType.ONCE -> {

@@ -15,9 +15,9 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## Active
 4. When a reminder is showing as a notification, its title should tell the name of the alarm.
 5. When a reminder is fired as a notification, the user should be able to mark it complete within the notification itself.
-6. The days of week presented for recurring reminder should start from right to left
 
 ## ❔Ready for Testing
+6. The days of week presented for recurring reminder should start from right to left
 
 
 ## ✔️Manually verified
