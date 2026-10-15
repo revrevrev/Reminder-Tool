@@ -7,6 +7,7 @@ import com.example.reminders.data.model.Reminder
 import com.example.reminders.data.model.ReminderType
 import com.example.reminders.data.repository.CategoryRepository
 import com.example.reminders.data.repository.ReminderRepository
+import com.example.reminders.data.repository.SettingsRepository
 import com.example.reminders.util.DateTimeUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -34,6 +35,7 @@ fun ReminderDraft.isValid() = name.isNotBlank() && categoryId != null
 class ReminderSheetViewModel @Inject constructor(
     private val reminderRepo: ReminderRepository,
     private val categoryRepo: CategoryRepository,
+    private val settingsRepo: SettingsRepository,
     private val alarmScheduler: AlarmScheduler
 ) : ViewModel() {
 
@@ -45,7 +47,9 @@ class ReminderSheetViewModel @Inject constructor(
     fun loadReminder(id: Int?) {
         viewModelScope.launch {
             if (id == null || id == 0) {
-                _draft.value = ReminderDraft()
+                val defaultCatId = settingsRepo.defaultCategoryId.first()
+                val validId = if (defaultCatId != null && categoryRepo.getById(defaultCatId) != null) defaultCatId else null
+                _draft.value = ReminderDraft(categoryId = validId)
                 return@launch
             }
             val r = reminderRepo.getById(id) ?: return@launch

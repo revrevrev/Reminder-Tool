@@ -6,6 +6,7 @@ import com.example.reminders.data.model.CATEGORY_COLORS
 import com.example.reminders.data.model.Category
 import com.example.reminders.data.repository.CategoryRepository
 import com.example.reminders.data.repository.ReminderRepository
+import com.example.reminders.data.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -22,7 +23,8 @@ data class CategoryDraft(
 @HiltViewModel
 class CategorySheetViewModel @Inject constructor(
     private val categoryRepo: CategoryRepository,
-    private val reminderRepo: ReminderRepository
+    private val reminderRepo: ReminderRepository,
+    private val settingsRepo: SettingsRepository
 ) : ViewModel() {
 
     private val _draft = MutableStateFlow(CategoryDraft())
@@ -89,6 +91,11 @@ class CategorySheetViewModel @Inject constructor(
                 reminders.filter { it.categoryId == d.id }.forEach {
                     reminderRepo.save(it.copy(categoryId = targetId))
                 }
+            }
+            // If the deleted category was the default, update to moveTarget or null
+            val currentDefault = settingsRepo.defaultCategoryId.first()
+            if (currentDefault == d.id) {
+                settingsRepo.setDefaultCategoryId(targetId)
             }
             val cat = categoryRepo.getById(d.id)
             cat?.let { categoryRepo.delete(it) }

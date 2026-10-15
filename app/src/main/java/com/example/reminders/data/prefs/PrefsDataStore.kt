@@ -20,11 +20,20 @@ class PrefsDataStore @Inject constructor(@ApplicationContext private val context
 
     private val DEFAULT_SNOOZE = intPreferencesKey("default_snooze")
     private val UNDO_SNAPSHOT = stringPreferencesKey("undo_snapshot")
+    private val DEFAULT_CATEGORY_ID = intPreferencesKey("default_category_id")
 
     val defaultSnoozeMinutes: Flow<Int> = context.dataStore.data.map { it[DEFAULT_SNOOZE] ?: 10 }
 
     suspend fun setDefaultSnooze(minutes: Int) {
         context.dataStore.edit { it[DEFAULT_SNOOZE] = minutes }
+    }
+
+    val defaultCategoryId: Flow<Int?> = context.dataStore.data.map { it[DEFAULT_CATEGORY_ID] }
+
+    suspend fun setDefaultCategoryId(id: Int?) {
+        context.dataStore.edit {
+            if (id == null) it.remove(DEFAULT_CATEGORY_ID) else it[DEFAULT_CATEGORY_ID] = id
+        }
     }
 
     val undoSnapshot: Flow<String?> = context.dataStore.data.map { it[UNDO_SNAPSHOT] }
