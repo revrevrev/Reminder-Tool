@@ -10,6 +10,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mockConstruction
 import org.mockito.kotlin.*
+import java.io.IOException
 
 class SoundPlayerTest {
 
@@ -41,6 +42,31 @@ class SoundPlayerTest {
         val field = SoundPlayer::class.java.getDeclaredField("mediaPlayer")
         field.isAccessible = true
         field.set(SoundPlayer, null)
+    }
+
+    /**
+     * Regression test for: placeholder OGG files (invalid audio) cause prepare() to throw
+     * IOException, which propagates uncaught and crashes the app.
+     *
+     * The fix must catch the exception, release the MediaPlayer, and leave mediaPlayer null.
+     */
+    @Test
+    fun `preview does not crash when prepare throws IOException`() {
+        mockConstruction(AudioAttributes.Builder::class.java) { builder, _ ->
+            whenever(builder.setUsage(any<Int>())).thenReturn(builder)
+            whenever(builder.setContentType(any<Int>())).thenReturn(builder)
+            doReturn(null).whenever(builder).build()
+        }.use {
+            doThrow(IOException("invalid audio data")).whenever(mockMp1).prepare()
+
+            // Must NOT propagate — app must not crash on invalid/placeholder audio files
+            SoundPlayer.preview(mockContext, "chime", 70)
+
+            // Player must be released and not left dangling
+            verify(mockMp1).release()
+            // start() must NOT have been called on a player that never prepared
+            verify(mockMp1, never()).start()
+        }
     }
 
     /**

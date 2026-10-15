@@ -57,3 +57,10 @@ Goal: a fast, single-glance form where the keyboard never covers the field being
 
 ## 4. Android system bars / edge-to-edge
 The app must never draw under the 3-button navigation bar (back/home/recents) or the gesture bar. Apply `WindowInsets.systemBars` / `navigationBars` padding to the root, so the bottom nav, FAB and toast all sit above the system bar. The prototype's fake status bar and home indicator exist only inside the mock frame and are not built.
+
+## 5. App icon & launch screen (Paper)
+See `App Icon and Splash.dc.html`. Replaces the old Organic (orange) icon and splash.
+- **Adaptive icon:** 108dp canvas. Background layer: solid accent `#4170cb`. Foreground: white bell (same glyph as the "תזכורות" nav tab), 48dp, centered inside the 66dp safe zone, stroke 2.2, round caps/joins.
+- **Monochrome layer** (Android 13 themed icons): the bell only.
+- **Play Store:** 512×512, same art, no shadow.
+- **Launch screen** (SplashScreen API): `windowSplashScreenBackground` `#ffffff`; `windowSplashScreenAnimatedIcon` = icon foreground; `windowSplashScreenIconBackgroundColor` `#4170cb`. No wordmark or branding image. Default fade-out once home is ready.

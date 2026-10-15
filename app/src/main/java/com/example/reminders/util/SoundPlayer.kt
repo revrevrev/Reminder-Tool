@@ -23,19 +23,23 @@ object SoundPlayer {
 
     fun preview(context: Context, soundId: String, volume: Int) {
         stop()
-        mediaPlayer = playerFactory().apply {
-            setAudioAttributes(
+        val mp = playerFactory()
+        try {
+            mp.setAudioAttributes(
                 AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_MEDIA)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .build()
             )
-            setDataSource(context.resources.openRawResourceFd(soundResId(soundId)))
-            setVolume(volume / 100f, volume / 100f)
-            isLooping = false
-            prepare()
-            start()
-            setOnCompletionListener { mediaPlayer = null; release() }
+            mp.setDataSource(context.resources.openRawResourceFd(soundResId(soundId)))
+            mp.setVolume(volume / 100f, volume / 100f)
+            mp.isLooping = false
+            mp.prepare()
+            mp.start()
+            mp.setOnCompletionListener { mediaPlayer = null; it.release() }
+            mediaPlayer = mp
+        } catch (e: Exception) {
+            mp.runCatching { release() }
         }
     }
 
