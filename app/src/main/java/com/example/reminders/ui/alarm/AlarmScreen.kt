@@ -80,7 +80,7 @@ fun AlarmScreen(
             // Name + notes
             Text(
                 text = reminder.name,
-                style = AppTypography.headlineLarge,
+                style = AppTypography.displayMedium,
                 color = tone.fg
             )
             reminder.notes?.let {

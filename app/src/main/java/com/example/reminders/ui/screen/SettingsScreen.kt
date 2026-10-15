@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -38,7 +37,7 @@ fun SettingsScreen(
             modifier = Modifier.padding(horizontal = 8.dp))
         Spacer(Modifier.height(4.dp))
 
-        // Default snooze card
+        // Default snooze card — title shortened to "משך נודניק"
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -47,7 +46,7 @@ fun SettingsScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text("משך נודניק ברירת מחדל", style = AppTypography.titleMedium, color = TextColor)
+            Text("משך נודניק", style = AppTypography.titleMedium, color = TextColor)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 SNOOZE_OPTIONS.forEach { min ->
                     val selected = state.defaultSnooze == min
@@ -70,7 +69,7 @@ fun SettingsScreen(
             }
         }
 
-        // Archive row
+        // Archive row — no leading icon
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -81,7 +80,6 @@ fun SettingsScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            Icon(Icons.Outlined.Archive, contentDescription = null, tint = Neutral600, modifier = Modifier.size(24.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text("ארכיון", style = AppTypography.titleMedium, color = TextColor)
                 val subtitle = if (state.archivedCount == 0) "ריק"

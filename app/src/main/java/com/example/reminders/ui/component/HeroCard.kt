@@ -3,7 +3,6 @@ package com.example.reminders.ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Pause
@@ -13,8 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import com.example.reminders.data.model.Reminder
 import com.example.reminders.data.model.ReminderType
@@ -43,39 +40,23 @@ fun HeroCard(
             .background(bgColor)
             .clickable(onClick = onClick)
     ) {
-        // Decorative circles (far/RTL side = left in RTL)
-        Box(
-            modifier = Modifier
-                .size(170.dp)
-                .offset(x = (-40).dp, y = (-40).dp)
-                .clip(CircleShape)
-                .background(
-                    if (isPaused) Neutral200.copy(alpha = 0.55f)
-                    else tone.c1.copy(alpha = 0.55f)
-                )
-        )
-        Box(
-            modifier = Modifier
-                .size(70.dp)
-                .offset(x = 34.dp, y = 62.dp)
-                .clip(CircleShape)
-                .background(
-                    if (isPaused) Neutral400.copy(alpha = 0.6f)
-                    else tone.c2.copy(alpha = 0.6f)
-                )
-        )
-
         Column(
-            modifier = Modifier.padding(horizontal = 22.dp, vertical = 22.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            modifier = Modifier.padding(20.dp),
+            verticalArrangement = Arrangement.Top
         ) {
             // Kicker
             val kicker = if (isPaused) "בהשהיה · לא תופעל"
             else "הבא בתור · ${DateTimeUtil.relativeCountdown(DateTimeUtil.nextFireTimeMs(reminder))}"
             Text(text = kicker, style = AppTypography.labelMedium, color = fgColor.copy(alpha = 0.85f))
 
-            // Name
-            Text(text = reminder.name, style = AppTypography.headlineLarge, color = fgColor)
+            // Name (margin-top 6, margin-bottom 4)
+            Text(
+                text = reminder.name,
+                style = AppTypography.headlineLarge,
+                color = fgColor,
+                lineHeight = AppTypography.headlineLarge.fontSize * 1.15,
+                modifier = Modifier.padding(top = 6.dp, bottom = 4.dp)
+            )
 
             // Meta
             val meta = buildMeta(reminder)
@@ -95,7 +76,6 @@ fun HeroCard(
             // Action buttons
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 if (!isPaused) {
-                    // Done button
                     Button(
                         onClick = onDone,
                         colors = ButtonDefaults.buttonColors(containerColor = Bg, contentColor = tone.btnFg),
@@ -106,7 +86,6 @@ fun HeroCard(
                         Spacer(Modifier.width(6.dp))
                         Text("סיימתי", style = AppTypography.labelLarge)
                     }
-                    // Pause button
                     Button(
                         onClick = onPauseResume,
                         colors = ButtonDefaults.buttonColors(containerColor = tone.c2, contentColor = tone.pauseFg),
@@ -118,7 +97,6 @@ fun HeroCard(
                         Text("השהיה", style = AppTypography.labelLarge)
                     }
                 } else {
-                    // Resume button
                     Button(
                         onClick = onPauseResume,
                         colors = ButtonDefaults.buttonColors(containerColor = Accent2_600, contentColor = Bg),
@@ -138,7 +116,7 @@ fun HeroCard(
 private fun buildMeta(reminder: Reminder): String {
     val timePart = when (reminder.type) {
         ReminderType.ONCE -> {
-            val date = reminder.date ?: return ""
+            reminder.date ?: return ""
             val label = DateTimeUtil.hebrewDayLabel(reminder)
             "$label ב-${reminder.time}"
         }

@@ -13,6 +13,6 @@ val AppShapes = Shapes(
 )
 
 val PillShape = RoundedCornerShape(999.dp)
-val HeroShape = RoundedCornerShape(34.dp)
+val HeroShape = RoundedCornerShape(28.dp)
 val SheetShape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
 val TypeTileShape = RoundedCornerShape(24.dp)

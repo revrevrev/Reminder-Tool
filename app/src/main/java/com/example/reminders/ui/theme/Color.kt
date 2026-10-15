@@ -2,47 +2,50 @@ package com.example.reminders.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+// Paper theme — all hex values are sRGB conversions of the OKLCH ramp
+// defined in CHANGES.md / the design system.
+
 // Background & surface
-val Bg = Color(0xFFF5EAD8)
-val Surface = Color(0xFFEBDDC5)
-val TextColor = Color(0xFF201E1D)
+val Bg = Color(0xFFFFFFFF)
+val Surface = Color(0xFFF2F3F5)
+val TextColor = Color(0xFF151618)
 
-// Neutral ramp
-val Neutral100 = Color(0xFFF9F4ED)
-val Neutral200 = Color(0xFFEEE7DB)
-val Neutral300 = Color(0xFFDCD3C4)
-val Neutral400 = Color(0xFFC0B6A5)
-val Neutral500 = Color(0xFFA19786)
-val Neutral600 = Color(0xFF82796A)
-val Neutral700 = Color(0xFF645C50)
-val Neutral800 = Color(0xFF474238)
-val Neutral900 = Color(0xFF2E2B25)
+// Neutral ramp (hue 260, chroma .008, lightness steps .975/.93/.87/.78/.67/.56/.46/.36/.27)
+val Neutral100 = Color(0xFFF5F7F9)
+val Neutral200 = Color(0xFFE7E8EA)
+val Neutral300 = Color(0xFFD2D4D8)
+val Neutral400 = Color(0xFFB5B7BB)
+val Neutral500 = Color(0xFF92959A)
+val Neutral600 = Color(0xFF727579)
+val Neutral700 = Color(0xFF55585D)
+val Neutral800 = Color(0xFF3B3D41)
+val Neutral900 = Color(0xFF24272A)
 
-// Accent (orange) ramp
-val Accent100 = Color(0xFFFFF2EB)
-val Accent200 = Color(0xFFFFE1D0)
-val Accent300 = Color(0xFFFFC6A5)
-val Accent400 = Color(0xFFF6A06B)
-val Accent500 = Color(0xFFD67F48)
-val Accent600 = Color(0xFFB2622D)   // default accent
-val AccentMain = Color(0xFFC67139)
-val Accent700 = Color(0xFF8C491A)
-val Accent800 = Color(0xFF643312)
-val Accent900 = Color(0xFF402310)
+// Accent (blue) ramp — hue 262, chroma .15
+val Accent100 = Color(0xFFE4F8FF)
+val Accent200 = Color(0xFFD5E9FF)
+val Accent300 = Color(0xFFAFD5FF)
+val Accent400 = Color(0xFF93B8FB)
+val Accent500 = Color(0xFF6193F1)
+val Accent600 = Color(0xFF4170CB)
+val AccentMain = Accent600   // primary accent = accent-600
+val Accent700 = Color(0xFF2552AA)
+val Accent800 = Color(0xFF08348A)
+val Accent900 = Color(0xFF00186E)
 
-// Accent-2 (green) ramp
-val Accent2_100 = Color(0xFFF0FAE1)
-val Accent2_200 = Color(0xFFE1EECC)
-val Accent2_300 = Color(0xFFCCDBB2)
-val Accent2_400 = Color(0xFFAEBF92)
-val Accent2_500 = Color(0xFF8FA073)
-val Accent2_600 = Color(0xFF728157)
-val Accent2_700 = Color(0xFF56633F)
-val Accent2_800 = Color(0xFF3D472B)
-val Accent2_900 = Color(0xFF272E1B)
+// Accent-2 (green) ramp — hue 160, chroma .09
+val Accent2_100 = Color(0xFFE5FEEF)
+val Accent2_200 = Color(0xFFD7EFE1)
+val Accent2_300 = Color(0xFFB1E2C6)
+val Accent2_400 = Color(0xFF95C4AA)
+val Accent2_500 = Color(0xFF60A682)
+val Accent2_600 = Color(0xFF3E8562)
+val Accent2_700 = Color(0xFF1D6746)
+val Accent2_800 = Color(0xFF004B2C)
+val Accent2_900 = Color(0xFF003316)
 
 // Nav bar
-val NavBarBg = Surface
+val NavBarBg = Bg
 
 fun paletteColor(token: String): Color = when (token) {
     "accent-100" -> Accent100; "accent-200" -> Accent200; "accent-300" -> Accent300

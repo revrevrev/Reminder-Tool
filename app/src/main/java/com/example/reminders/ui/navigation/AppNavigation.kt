@@ -45,9 +45,10 @@ fun AppNavigation() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Surface)
-                    .padding(horizontal = 10.dp)
-                    .padding(top = 12.dp, bottom = 26.dp)
+                    .background(Bg)
+                    .navigationBarsPadding()
+                    .padding(horizontal = 12.dp)
+                    .padding(top = 8.dp, bottom = 22.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),

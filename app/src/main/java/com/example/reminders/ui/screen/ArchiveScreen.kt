@@ -1,4 +1,4 @@
-﻿package com.example.reminders.ui.screen
+package com.example.reminders.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -33,23 +33,23 @@ fun ArchiveScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(contentPadding = PaddingValues(bottom = 110.dp)) {
             item {
-                Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 20.dp, bottom = 14.dp)) {
+                Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 12.dp, bottom = 16.dp)) {
                     TextButton(
                         onClick = onBack,
                         contentPadding = PaddingValues(0.dp)
                     ) {
-                        Icon(Icons.Outlined.ChevronRight, contentDescription = null, tint = AccentMain, modifier = Modifier.size(18.dp))
+                        Icon(Icons.Outlined.ChevronRight, contentDescription = null,
+                            tint = AccentMain, modifier = Modifier.size(18.dp))
                         Text("הגדרות", style = AppTypography.labelLarge, color = AccentMain)
                     }
                     Text("ארכיון", style = AppTypography.headlineLarge, color = TextColor)
-                    Text("תזכורות חד-פעמיות שהושלמו", style = AppTypography.bodyMedium, color = Neutral700)
                 }
             }
 
             if (state.reminders.isEmpty()) {
                 item {
                     Text(
-                        "הארכיון ריק. כשמסמנים תזכורת חד-פעמית כ\u201Eסיימתי\u201D, היא עוברת לכאן.",
+                        "הארכיון ריק. כשמסמנים תזכורת חד-פעמית כ„סיימתי”, היא עוברת לכאן.",
                         style = AppTypography.bodyMedium,
                         color = Neutral700,
                         modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)
@@ -61,13 +61,13 @@ fun ArchiveScreen(
                         reminder = reminder,
                         onRestore = { vm.restore(reminder) { onOpenEdit(it) } },
                         onDelete = { vm.delete(reminder) },
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                        modifier = Modifier.padding(horizontal = 12.dp)
                     )
+                    Spacer(Modifier.height(2.dp))
                 }
             }
         }
 
-        // Toast
         state.toast?.let { toast ->
             ToastHost(
                 toast = toast,
@@ -90,16 +90,14 @@ private fun ArchiveRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clip(MaterialTheme.shapes.large)
-            .background(Surface)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(horizontal = 12.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Category dot - we'd need category color here, using a placeholder
+        // Category dot — 10dp
         Box(
             modifier = Modifier
-                .size(12.dp)
+                .size(10.dp)
                 .clip(CircleShape)
                 .background(Accent500)
         )
@@ -118,15 +116,17 @@ private fun ArchiveRow(
             )
         }
 
-        OutlinedButton(
+        // Ghost restore button
+        TextButton(
             onClick = onRestore,
             contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
         ) {
-            Text("שחזר", style = AppTypography.labelLarge)
+            Text("שחזר", style = AppTypography.labelLarge, color = Neutral700)
         }
 
         IconButton(onClick = onDelete, modifier = Modifier.size(36.dp)) {
-            Icon(Icons.Outlined.Delete, contentDescription = "מחק", tint = Accent700, modifier = Modifier.size(18.dp))
+            Icon(Icons.Outlined.Delete, contentDescription = "מחק",
+                tint = Accent700, modifier = Modifier.size(18.dp))
         }
     }
 }

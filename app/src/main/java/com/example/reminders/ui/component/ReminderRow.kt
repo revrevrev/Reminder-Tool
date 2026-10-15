@@ -7,7 +7,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Pause
 import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material.icons.outlined.Repeat
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,7 +15,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.reminders.data.model.Reminder
-import com.example.reminders.data.model.ReminderType
 import com.example.reminders.ui.theme.*
 import com.example.reminders.util.DateTimeUtil
 import com.example.reminders.util.categoryTone
@@ -81,11 +79,6 @@ fun ReminderRow(
                 isPaused ->
                     Text("בהשהיה", style = AppTypography.labelMedium, color = Neutral700)
             }
-        }
-
-        // Weekly repeat icon
-        if (reminder.type == ReminderType.WEEKLY) {
-            Icon(Icons.Outlined.Repeat, contentDescription = null, modifier = Modifier.size(16.dp), tint = iconTint)
         }
 
         // Pause/Resume icon button

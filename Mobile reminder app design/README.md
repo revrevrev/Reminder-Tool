@@ -1,5 +1,7 @@
 # Handoff: Reminders App (Android, Hebrew / RTL)
 
+> **Updated:** see `CHANGES.md` for the latest round (Paper theme, full-screen reminder editor, minimal pass, Android insets). It overrides this file where they conflict.
+
 ## Overview
 A personal reminders app for Android, fully in Hebrew with right-to-left layout. Two reminder types:
 - **One-off (חד-פעמית)** — a date + time. When marked done it is **archived** and disappears from the list.

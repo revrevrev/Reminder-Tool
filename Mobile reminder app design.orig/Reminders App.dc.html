@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="stylesheet" href="_ds/organic-aea46c3e-2f10-4305-a176-ec3e17980a38/styles.css">
+<script src="_ds/organic-aea46c3e-2f10-4305-a176-ec3e17980a38/_ds_bundle.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Suez+One&family=Rubik:wght@400;500;600;700&display=swap">
+<style>
+:root{--font-heading:"Caprasimo","Suez One",serif;--font-body:"Figtree","Rubik",system-ui,sans-serif}
+body{margin:0;background:var(--color-neutral-200);font-family:var(--font-body)}
+a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.75;stroke-linecap:round;stroke-linejoin:round;flex:none;display:block}
+@keyframes ring{0%{transform:scale(.6);opacity:.7}100%{transform:scale(1.6);opacity:0}}
+@keyframes wiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(12deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(5deg)}}
+.scroll::-webkit-scrollbar{display:none}
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;flex-wrap:wrap;gap:40px;align-items:center;justify-content:center;padding:32px 20px">
+
+  <div dir="rtl" lang="he" style="width:380px;height:800px;border-radius:44px;border:10px solid var(--color-neutral-900);background:var(--color-bg);position:relative;overflow:hidden;box-shadow:var(--shadow-lg);display:flex;flex-direction:column;flex:none">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 24px 0;font-size:12px;font-weight:600;direction:ltr;flex:none"><span style="display:flex;gap:5px"><span style="width:14px;height:9px;border-radius:2px;background:var(--color-text)"></span><span style="width:20px;height:9px;border-radius:3px;border:1.5px solid var(--color-text)"></span></span><span>16:20</span></div>
+
+    <div class="scroll" style="flex:1;overflow-y:auto;scrollbar-width:none;padding-bottom:110px">
+
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+        <div style="padding:20px 24px 14px"><div style="font-size:13px;color:var(--color-neutral-700)">יום שלישי, 13 באוקטובר</div><h2 style="margin:0;font-size:32px">תזכורות</h2></div>
+
+        <sc-if value="{{ hasActive }}" hint-placeholder-val="{{ true }}">
+          <div class="scroll" style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:0 16px 14px">
+            <sc-for list="{{ filters }}" as="fl" hint-placeholder-count="5">
+              <button onClick="{{ fl.onClick }}" style="all:unset;cursor:pointer;flex:none;display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600;transition:background .2s,color .2s;background:{{ fl.bg }};color:{{ fl.fg }}"><sc-if value="{{ fl.hasDot }}" hint-placeholder-val="{{ false }}"><span style="width:10px;height:10px;border-radius:50%;background:{{ fl.color }}"></span></sc-if>{{ fl.label }}</button>
+            </sc-for>
+          </div>
+          <sc-if value="{{ noneInFilter }}" hint-placeholder-val="{{ false }}">
+            <div style="margin:0 16px;padding:22px;border-radius:var(--radius-lg);background:var(--color-surface);display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+              <div style="font-weight:600">אין תזכורות פעילות בקטגוריה {{ filterName }}</div>
+              <button class="btn btn-secondary" onClick="{{ clearFilter }}" style="padding:8px 14px;font-size:13px">הצגת הכל</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ hasShown }}" hint-placeholder-val="{{ true }}">
+          <div onClick="{{ hero.onOpen }}" style="margin:0 16px;padding:22px 22px 20px;border-radius:34px;position:relative;overflow:hidden;cursor:pointer;transition:background .3s,color .3s;background:{{ hero.bg }};color:{{ hero.fg }}">
+            <div style="position:absolute;left:-40px;top:-40px;width:170px;height:170px;border-radius:50%;opacity:.55;background:{{ hero.c1 }}"></div>
+            <div style="position:absolute;left:34px;top:62px;width:70px;height:70px;border-radius:50%;opacity:.6;background:{{ hero.c2 }}"></div>
+            <div style="position:relative;font-size:12px;letter-spacing:.04em;font-weight:600">{{ hero.kicker }}</div>
+            <div style="position:relative;font-family:var(--font-heading);font-size:32px;line-height:1.15;margin:8px 0 4px;text-wrap:pretty">{{ hero.name }}</div>
+            <div style="position:relative;font-size:14px">{{ hero.when }} · {{ hero.typeLabel }}</div>
+            <sc-if value="{{ hero.snoozed }}" hint-placeholder-val="{{ false }}"><div style="position:relative;font-size:13px;margin-top:4px;font-weight:600">נודניק עד {{ hero.time }}</div></sc-if>
+            <sc-if value="{{ hero.paused }}" hint-placeholder-val="{{ false }}"><div style="position:relative;display:flex;gap:8px;margin-top:16px">
+              <button class="btn" onClick="{{ hero.onResume }}" style="background:var(--color-accent-2-600);color:var(--color-bg);padding:9px 16px" style-hover="background:var(--color-accent-2-700)" style-active="background:var(--color-accent-2-800)"><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px;transform:scaleX(-1)"><path d="M6 3l14 9-14 9V3z"></path></svg>המשך</button>
+            </div></sc-if>
+            <sc-if value="{{ hero.active }}" hint-placeholder-val="{{ true }}"><div style="position:relative;display:flex;gap:8px;margin-top:16px">
+              <button class="btn" onClick="{{ hero.onDone }}" style="background:var(--color-bg);color:{{ hero.btnFg }};padding:9px 16px" style-hover="background:var(--color-neutral-100)" style-active="background:var(--color-neutral-200)"><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M20 6 9 17l-5-5"></path></svg>סיימתי</button>
+              <button class="btn" onClick="{{ hero.onPause }}" style="background:{{ hero.c2 }};color:{{ hero.pauseFg }};padding:9px 16px" style-hover="filter:brightness(.93)" style-active="filter:brightness(.86)"><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><rect x="14" y="4" width="4" height="16" rx="1"></rect><rect x="6" y="4" width="4" height="16" rx="1"></rect></svg>השהיה</button>
+            </div></sc-if>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ hasLater }}" hint-placeholder-val="{{ true }}">
+            <div style="padding:24px 24px 6px;font-size:12px;letter-spacing:.04em;font-weight:600;color:var(--color-neutral-700)">בהמשך</div>
+          </sc-if>
+          <div style="display:flex;flex-direction:column;padding:0 12px">
+            <sc-for list="{{ later }}" as="r" hint-placeholder-count="4">
+              <div onClick="{{ r.onOpen }}" style="display:flex;align-items:center;gap:14px;padding:11px 12px;border-radius:22px;cursor:pointer;background:{{ r.rowBg }}" style-hover="background:var(--color-surface)" style-active="background:var(--color-neutral-300)">
+                <div style="width:60px;flex:none;text-align:center"><div style="font-size:11px;color:var(--color-neutral-700)">{{ r.dayLabel }}</div><div style="font-family:var(--font-heading);font-size:19px;line-height:1.2;color:{{ r.fg }}">{{ r.time }}</div></div>
+                <span style="width:4px;align-self:stretch;border-radius:999px;background:{{ r.color }}"></span>
+                <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:15px;color:{{ r.fg }}">{{ r.name }}</div><sc-if value="{{ r.snoozed }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:var(--color-accent-700)">נודניק</div></sc-if><sc-if value="{{ r.paused }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:var(--color-neutral-700)">בהשהיה</div></sc-if></div>
+                <sc-if value="{{ r.weekly }}" hint-placeholder-val="{{ false }}"><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px;color:{{ r.iconFg }}"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg></sc-if>
+                <sc-if value="{{ r.active }}" hint-placeholder-val="{{ true }}"><button class="btn btn-icon" onClick="{{ r.onPause }}" aria-label="השהיה" style="width:34px;height:34px;border-radius:50%;color:var(--color-neutral-700)" style-hover="background:var(--color-neutral-300)"><svg class="i" viewBox="0 0 24 24" style="width:15px;height:15px"><rect x="14" y="4" width="4" height="16" rx="1"></rect><rect x="6" y="4" width="4" height="16" rx="1"></rect></svg></button></sc-if>
+                <sc-if value="{{ r.paused }}" hint-placeholder-val="{{ false }}"><button class="btn btn-icon" onClick="{{ r.onResume }}" aria-label="המשך" style="width:34px;height:34px;border-radius:50%;color:{{ r.iconFg }}" style-hover="background:var(--color-neutral-300)"><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px;transform:scaleX(-1)"><path d="M6 3l14 9-14 9V3z"></path></svg></button></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:30px 24px 0;position:relative">
+            <div style="position:relative;width:200px;height:200px;margin:10px 0 26px">
+              <div style="position:absolute;inset:0;border-radius:50%;background:var(--color-accent-2-200)"></div>
+              <div style="position:absolute;width:90px;height:90px;left:0;bottom:-6px;border-radius:50%;background:var(--color-accent-300)"></div>
+              <div style="position:absolute;inset:0;display:grid;place-items:center;color:var(--color-accent-2-800)"><svg class="i" viewBox="0 0 24 24" style="width:64px;height:64px;stroke-width:2.25"><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path><path d="M3.3 15.3A1 1 0 0 0 4 17h16a1 1 0 0 0 .7-1.7C19.4 14 18 12.5 18 8A6 6 0 0 0 6 8c0 4.5-1.4 6-2.7 7.3"></path></svg></div>
+            </div>
+            <h3 style="margin:0 0 8px">אין תזכורות כרגע</h3>
+            <p style="margin:0 0 20px;color:var(--color-neutral-700);max-width:270px;text-wrap:pretty">הוסיפו תזכורת חד-פעמית או שבועית, ונזכיר לכם בזמן.</p>
+            <button class="btn btn-primary" onClick="{{ openNew }}" style="padding:13px 22px;font-size:15px"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>תזכורת חדשה</button>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{ isCats }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:20px 24px 16px"><h2 style="margin:0;font-size:32px">קטגוריות</h2><div style="font-size:13px;color:var(--color-neutral-700)">צליל ועוצמה ברירת מחדל לכל קטגוריה</div></div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:0 16px">
+          <sc-for list="{{ catList }}" as="c" hint-placeholder-count="4">
+            <div class="card" onClick="{{ c.onOpen }}" style="flex-direction:row;align-items:center;gap:14px;padding:14px 16px;cursor:pointer" style-hover="background:var(--color-neutral-300)" style-active="background:var(--color-neutral-400)">
+              <span style="width:40px;height:40px;border-radius:50%;flex:none;background:{{ c.color }}"></span>
+              <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:16px">{{ c.name }}</div><div style="font-size:12px;color:var(--color-neutral-700)">{{ c.count }}</div></div>
+              <div style="text-align:end"><div style="font-size:14px;font-weight:600">{{ c.soundName }}</div><div style="font-size:12px;color:var(--color-neutral-700)">עוצמה {{ c.volume }}%</div></div>
+              <svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="m15 18-6-6 6-6"></path></svg>
+            </div>
+          </sc-for>
+          <button onClick="{{ newCat }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:var(--radius-lg);border:2px dashed var(--color-neutral-400);color:var(--color-neutral-800);font-weight:600" style-hover="background:var(--color-surface)" style-active="background:var(--color-neutral-300)"><span style="width:40px;height:40px;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--color-surface)"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></span>קטגוריה חדשה</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isArchive }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:12px 24px 16px"><button class="btn btn-ghost" onClick="{{ goSettings }}" style="padding:8px 10px;margin-inline-start:-10px;margin-bottom:4px"><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="m9 18 6-6-6-6"></path></svg>הגדרות</button><h2 style="margin:0;font-size:32px">ארכיון</h2><div style="font-size:13px;color:var(--color-neutral-700)">תזכורות חד-פעמיות שהושלמו</div></div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:0 16px">
+          <sc-for list="{{ archived }}" as="a" hint-placeholder-count="2">
+            <div class="card" style="flex-direction:row;align-items:center;gap:12px;padding:14px 16px">
+              <span style="width:12px;height:12px;border-radius:50%;background:{{ a.color }};flex:none"></span>
+              <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:15px;text-decoration:line-through;text-decoration-color:var(--color-neutral-500)">{{ a.name }}</div><div style="font-size:12px;color:var(--color-neutral-700)">{{ a.when }} · הושלם {{ a.doneLabel }}</div></div>
+              <button class="btn btn-secondary" onClick="{{ a.onRestore }}" style="padding:7px 12px;font-size:13px">שחזר</button>
+              <button class="btn btn-icon" onClick="{{ a.onDelete }}" aria-label="מחק" style="color:var(--color-accent-700)" style-hover="background:var(--color-accent-100)"><svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ archiveEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:20px 24px;color:var(--color-neutral-700)">הארכיון ריק. כשמסמנים תזכורת חד-פעמית כ„סיימתי”, היא עוברת לכאן.</div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:20px 24px 16px"><h2 style="margin:0;font-size:32px">הגדרות</h2></div>
+        <div style="display:flex;flex-direction:column;gap:12px;padding:0 16px">
+          <div class="card" onClick="{{ goArchive }}" style="flex-direction:row;align-items:center;gap:12px;padding:16px 18px;cursor:pointer;order:2" style-hover="background:var(--color-neutral-300)" style-active="background:var(--color-neutral-400)">
+            <svg class="i" viewBox="0 0 24 24"><rect width="20" height="5" x="2" y="3" rx="1"></rect><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"></path><path d="M10 12h4"></path></svg>
+            <div style="flex:1"><div style="font-weight:600">ארכיון</div><div style="font-size:13px;color:var(--color-neutral-700)">{{ archiveSub }}</div></div>
+            <svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="m15 18-6-6 6-6"></path></svg>
+          </div>
+          <div class="card" style="padding:16px 18px;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2"></path><path d="M5 3 2 6"></path><path d="m22 6-3-3"></path></svg><span style="font-weight:600">משך נודניק ברירת מחדל</span></div>
+            <div style="display:flex;gap:8px">
+              <sc-for list="{{ snoozeSetting }}" as="o" hint-placeholder-count="4">
+                <button class="btn" onClick="{{ o.onClick }}" style="flex:1;padding:9px 0;font-size:14px;background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <sc-if value="{{ showFab }}" hint-placeholder-val="{{ true }}">
+        <button class="btn btn-primary" onClick="{{ openNew }}" aria-label="תזכורת חדשה" style="position:absolute;left:20px;bottom:100px;width:62px;height:62px;border-radius:50%;padding:0;box-shadow:var(--shadow-md);z-index:5"><svg class="i" viewBox="0 0 24 24" style="width:26px;height:26px"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
+      </sc-if>
+    </sc-if>
+
+    <div style="position:absolute;left:16px;right:16px;bottom:96px;z-index:15;display:flex;align-items:center;gap:12px;padding:12px 14px 12px 10px;border-radius:999px;background:var(--color-neutral-900);color:var(--color-bg);box-shadow:var(--shadow-md);transition:transform .3s cubic-bezier(.2,.8,.2,1),opacity .3s;transform:{{ toastT }};opacity:{{ toastO }};pointer-events:{{ toastPE }}">
+      <span style="flex:1;font-size:14px;padding-inline-start:6px">{{ toastText }}</span>
+      <sc-if value="{{ toastUndo }}" hint-placeholder-val="{{ false }}"><button class="btn" onClick="{{ undo }}" style="color:var(--color-accent-300);padding:6px 12px" style-hover="background:var(--color-neutral-800)">ביטול</button></sc-if>
+    </div>
+
+    <div style="flex:none;position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-around;padding:10px 12px 26px;background:var(--color-surface);z-index:6">
+      <button onClick="{{ goHome }}" style="all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:600;color:{{ nav.homeFg }}"><span style="padding:5px 16px;border-radius:999px;background:{{ nav.homeBg }};transition:background .2s"><svg class="i" viewBox="0 0 24 24"><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path><path d="M3.3 15.3A1 1 0 0 0 4 17h16a1 1 0 0 0 .7-1.7C19.4 14 18 12.5 18 8A6 6 0 0 0 6 8c0 4.5-1.4 6-2.7 7.3"></path></svg></span>תזכורות</button>
+      <button onClick="{{ goCats }}" style="all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:600;color:{{ nav.catFg }}"><span style="padding:5px 16px;border-radius:999px;background:{{ nav.catBg }};transition:background .2s"><svg class="i" viewBox="0 0 24 24"><circle cx="7.5" cy="7.5" r="4"></circle><circle cx="16.5" cy="7.5" r="4"></circle><circle cx="7.5" cy="16.5" r="4"></circle><circle cx="16.5" cy="16.5" r="4"></circle></svg></span>קטגוריות</button>
+      <button onClick="{{ goSettings }}" style="all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:600;color:{{ nav.setFg }}"><span style="padding:5px 16px;border-radius:999px;background:{{ nav.setBg }};transition:background .2s"><svg class="i" viewBox="0 0 24 24"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg></span>הגדרות</button>
+    </div>
+    <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:110px;height:4px;border-radius:999px;background:var(--color-text);opacity:.5;z-index:50"></div>
+
+    <div onClick="{{ closeSheet }}" style="position:absolute;inset:0;z-index:20;background:var(--color-neutral-900);transition:opacity .3s;opacity:{{ sheetBdO }};pointer-events:{{ sheetPE }}"></div>
+    <div class="scroll" style="position:absolute;left:0;right:0;bottom:0;max-height:93%;overflow-y:auto;scrollbar-width:none;z-index:21;background:var(--color-bg);border-radius:32px 32px 0 0;padding:12px 20px 30px;display:flex;flex-direction:column;gap:16px;transition:transform .35s cubic-bezier(.2,.8,.2,1);transform:{{ sheetT }}">
+      <div style="width:40px;height:5px;border-radius:999px;background:var(--color-neutral-400);align-self:center;flex:none"></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <h3 style="margin:0;margin-inline-end:auto">{{ sheetTitle }}</h3>
+        <sc-if value="{{ isEdit }}" hint-placeholder-val="{{ false }}"><button class="btn btn-icon" onClick="{{ deleteDraft }}" aria-label="מחק" style="color:var(--color-accent-700)" style-hover="background:var(--color-accent-100)"><svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button></sc-if>
+        <button class="btn btn-icon btn-secondary" onClick="{{ closeSheet }}" aria-label="סגור"><svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <button onClick="{{ setOnce }}" style="all:unset;cursor:pointer;padding:16px;border-radius:24px;display:flex;flex-direction:column;gap:6px;transition:background .2s,box-shadow .2s;background:{{ tiles.onceBg }};color:{{ tiles.onceFg }};box-shadow:{{ tiles.onceRing }}"><svg class="i" viewBox="0 0 24 24" style="width:24px;height:24px"><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg><span style="font-family:var(--font-heading);font-size:18px">חד-פעמית</span><span style="font-size:12px">עוברת לארכיון בסיום</span></button>
+        <button onClick="{{ setWeekly }}" style="all:unset;cursor:pointer;padding:16px;border-radius:24px;display:flex;flex-direction:column;gap:6px;transition:background .2s,box-shadow .2s;background:{{ tiles.weeklyBg }};color:{{ tiles.weeklyFg }};box-shadow:{{ tiles.weeklyRing }}"><svg class="i" viewBox="0 0 24 24" style="width:24px;height:24px"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg><span style="font-family:var(--font-heading);font-size:18px">שבועית</span><span style="font-size:12px">חוזרת ביום קבוע</span></button>
+      </div>
+      <div class="field"><label>שם התזכורת</label><input class="input" value="{{ draft.name }}" onChange="{{ onName }}" placeholder="למשל: להתקשר לאמא" style="min-height:46px;font-size:15px"></div>
+      <div class="field"><label>קטגוריה</label>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <sc-for list="{{ cats }}" as="c" hint-placeholder-count="4">
+            <button onClick="{{ c.onClick }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;font-size:14px;font-weight:600;transition:background .2s,box-shadow .2s;background:{{ c.bg }};box-shadow:{{ c.ring }}"><span style="width:12px;height:12px;border-radius:50%;background:{{ c.color }}"></span>{{ c.name }}</button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ isNew }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--color-neutral-700)"><svg class="i" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>{{ catHint }}</div></sc-if>
+      </div>
+
+      <sc-if value="{{ isWeekly }}" hint-placeholder-val="{{ false }}">
+        <div class="field"><label>יום בשבוע</label>
+          <div style="display:flex;justify-content:space-between">
+            <sc-for list="{{ days }}" as="d" hint-placeholder-count="7">
+              <button onClick="{{ d.onClick }}" style="all:unset;cursor:pointer;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:14px;transition:background .2s;background:{{ d.bg }};color:{{ d.fg }}">{{ d.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <div style="display:flex;gap:10px">
+        <sc-if value="{{ isOnce }}" hint-placeholder-val="{{ true }}">
+          <div class="field" style="flex:1"><label>תאריך</label><input class="input" type="date" min="2026-10-13" value="{{ draft.date }}" onChange="{{ onDate }}" style="min-height:46px"></div>
+        </sc-if>
+        <div class="field" style="flex:1"><label>שעה</label><input class="input" type="time" value="{{ draft.time }}" onChange="{{ onTime }}" style="min-height:46px"></div>
+      </div>
+      <div style="font-size:13px;color:var(--color-accent-2-800);background:var(--color-accent-2-100);border-radius:999px;padding:8px 14px;align-self:flex-start">{{ summary }}</div>
+
+      <sc-if value="{{ isEdit }}" hint-placeholder-val="{{ false }}">
+        <div class="card" style="padding:14px 16px;gap:14px;border-radius:var(--radius-lg)">
+          <div style="display:flex;align-items:center;gap:12px">
+            <svg class="i" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+            <div style="flex:1;min-width:0"><div style="font-weight:600">צליל ועוצמה</div><div style="font-size:12px;color:var(--color-neutral-700)">{{ soundSub }}</div></div>
+            <span style="font-size:12px;color:var(--color-neutral-700)">התאמה אישית</span>
+            <button role="switch" aria-label="התאמה אישית" onClick="{{ toggleOverride }}" style="all:unset;cursor:pointer;flex:none;width:48px;height:28px;border-radius:999px;padding:3px;box-sizing:border-box;display:flex;transition:background .2s;background:{{ sw.bg }};justify-content:{{ sw.jc }}"><span style="width:22px;height:22px;border-radius:50%;background:var(--color-bg);box-shadow:var(--shadow-sm)"></span></button>
+          </div>
+          <sc-if value="{{ hasOverride }}" hint-placeholder-val="{{ false }}">
+            <div onClick="{{ openSound }}" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:999px;background:var(--color-bg);cursor:pointer" style-hover="background:var(--color-accent-100)">
+              <span style="flex:1">צליל</span><span style="font-weight:600">{{ draftSoundName }}</span><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="m15 18-6-6 6-6"></path></svg>
+            </div>
+            <div class="field"><label>עוצמה · {{ draftVolume }}%</label>
+              <div style="display:flex;align-items:center;gap:12px"><svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"></path><path d="M16 9a5 5 0 0 1 0 6"></path></svg><input type="range" min="0" max="100" value="{{ draftVolume }}" onChange="{{ onVolume }}" style="flex:1;accent-color:var(--color-accent)"></div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+      <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ false }}">
+        <div class="field"><label>הערות</label><textarea class="input" value="{{ draft.notes }}" onChange="{{ onNotes }}" placeholder="פרטים נוספים…" style="border-radius:var(--radius-lg);min-height:70px"></textarea></div>
+      </sc-if>
+      <sc-if value="{{ hideNotes }}" hint-placeholder-val="{{ true }}">
+        <button class="btn btn-ghost" onClick="{{ addNote }}" style="align-self:flex-start"><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>הוספת הערה</button>
+      </sc-if>
+      <button class="btn btn-primary btn-block" onClick="{{ save }}" disabled="{{ saveDisabled }}" style="padding:15px;font-size:16px;flex:none">שמירה</button>
+      <sc-if value="{{ saveDisabled }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;color:var(--color-neutral-700);text-align:center;margin-top:-8px">{{ saveHint }}</div></sc-if>
+    </div>
+
+    <div onClick="{{ closeCat }}" style="position:absolute;inset:0;z-index:22;background:var(--color-neutral-900);transition:opacity .3s;opacity:{{ catBdO }};pointer-events:{{ catPE }}"></div>
+    <div class="scroll" style="position:absolute;left:0;right:0;bottom:0;max-height:93%;overflow-y:auto;scrollbar-width:none;z-index:23;background:var(--color-bg);border-radius:32px 32px 0 0;padding:12px 20px 30px;display:flex;flex-direction:column;gap:16px;transition:transform .35s cubic-bezier(.2,.8,.2,1);transform:{{ catT }}">
+      <div style="width:40px;height:5px;border-radius:999px;background:var(--color-neutral-400);align-self:center;flex:none"></div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="width:36px;height:36px;border-radius:50%;flex:none;transition:background .2s;background:{{ catSheet.color }}"></span>
+        <h3 style="margin:0;margin-inline-end:auto">{{ catSheet.title }}</h3>
+        <sc-if value="{{ catSheet.canDelete }}" hint-placeholder-val="{{ false }}"><button class="btn btn-icon" onClick="{{ askDelCat }}" aria-label="מחיקת קטגוריה" style="color:var(--color-accent-700)" style-hover="background:var(--color-accent-100)"><svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button></sc-if>
+        <button class="btn btn-icon btn-secondary" onClick="{{ closeCat }}" aria-label="סגור"><svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+      </div>
+
+      <sc-if value="{{ catDelOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:18px;border-radius:var(--radius-lg);background:var(--color-accent-100);display:flex;flex-direction:column;gap:12px">
+          <div style="font-weight:600;font-size:16px">{{ catSheet.delTitle }}</div>
+          <div style="font-size:13px;color:var(--color-neutral-800);text-wrap:pretty">{{ catSheet.delNote }}</div>
+          <sc-if value="{{ catSheet.needsMove }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <sc-for list="{{ moveTargets }}" as="m" hint-placeholder-count="3">
+                <button onClick="{{ m.onClick }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;font-size:14px;font-weight:600;transition:background .2s,box-shadow .2s;background:{{ m.bg }};box-shadow:{{ m.ring }}"><span style="width:12px;height:12px;border-radius:50%;background:{{ m.color }}"></span>{{ m.name }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-secondary" onClick="{{ cancelDelCat }}" style="flex:1;padding:12px 0">ביטול</button>
+            <button class="btn" onClick="{{ confirmDelCat }}" disabled="{{ delDisabled }}" style="flex:1.4;padding:12px 0;background:var(--color-accent-700);color:var(--color-bg)" style-hover="background:var(--color-accent-800)" style-active="background:var(--color-accent-900)"><svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>{{ catSheet.delCta }}</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ catFormOpen }}" hint-placeholder-val="{{ true }}">
+        <div class="field"><label>שם הקטגוריה</label><input class="input" value="{{ catSheet.name }}" onChange="{{ onCatName }}" placeholder="למשל: עבודה" style="min-height:46px;font-size:15px"></div>
+        <div class="field"><label>צבע</label>
+          <div style="display:flex;flex-wrap:wrap;gap:12px">
+            <sc-for list="{{ catColors }}" as="k" hint-placeholder-count="8">
+              <button onClick="{{ k.onClick }}" aria-label="צבע" style="all:unset;cursor:pointer;width:34px;height:34px;border-radius:50%;transition:box-shadow .2s;background:{{ k.color }};box-shadow:{{ k.ring }}"></button>
+            </sc-for>
+          </div>
+        </div>
+        <div onClick="{{ openCatSound }}" class="card" style="flex-direction:row;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--radius-lg);cursor:pointer" style-hover="background:var(--color-neutral-300)">
+          <svg class="i" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg><span style="flex:1">צליל ברירת מחדל</span><span style="font-weight:600">{{ catSheet.soundName }}</span><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="m15 18-6-6 6-6"></path></svg>
+        </div>
+        <div class="field"><label>עוצמת ברירת מחדל · {{ catSheet.volume }}%</label>
+          <div style="display:flex;align-items:center;gap:12px"><svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"></path><path d="M16 9a5 5 0 0 1 0 6"></path></svg><input type="range" min="0" max="100" value="{{ catSheet.volume }}" onChange="{{ onCatVolume }}" style="flex:1;accent-color:var(--color-accent)"></div>
+        </div>
+        <p style="margin:0;font-size:13px;color:var(--color-neutral-700);text-wrap:pretty">{{ catSheet.note }}</p>
+        <button class="btn btn-primary btn-block" onClick="{{ saveCat }}" disabled="{{ catSaveDisabled }}" style="padding:15px;font-size:16px;flex:none">{{ catSheet.saveLabel }}</button>
+      </sc-if>
+    </div>
+
+    <div onClick="{{ closeSound }}" style="position:absolute;inset:0;z-index:30;background:var(--color-neutral-900);transition:opacity .3s;opacity:{{ spBdO }};pointer-events:{{ spPE }}"></div>
+    <div style="position:absolute;left:0;right:0;bottom:0;z-index:31;background:var(--color-bg);border-radius:32px 32px 0 0;padding:12px 16px 30px;display:flex;flex-direction:column;gap:6px;transition:transform .35s cubic-bezier(.2,.8,.2,1);transform:{{ spT }}">
+      <div style="width:40px;height:5px;border-radius:999px;background:var(--color-neutral-400);align-self:center;margin-bottom:6px"></div>
+      <div style="display:flex;align-items:center;padding:0 8px 6px"><h3 style="margin:0;margin-inline-end:auto">{{ spTitle }}</h3><button class="btn btn-ghost" onClick="{{ closeSound }}">סיום</button></div>
+      <sc-for list="{{ sounds }}" as="s" hint-placeholder-count="6">
+        <div onClick="{{ s.onPick }}" style="display:flex;align-items:center;gap:14px;padding:10px 12px;border-radius:22px;cursor:pointer;background:{{ s.rowBg }}" style-hover="background:var(--color-surface)">
+          <span style="width:20px;height:20px;border-radius:50%;flex:none;border:2px solid {{ s.dotBorder }};box-shadow:inset 0 0 0 4px var(--color-bg);background:{{ s.dotFill }}"></span>
+          <div style="flex:1"><div style="font-weight:600">{{ s.name }}</div><div style="font-size:12px;color:var(--color-neutral-700)">{{ s.desc }}</div></div>
+          <sc-if value="{{ s.isDefault }}" hint-placeholder-val="{{ false }}"><span class="tag tag-neutral">{{ s.defaultLabel }}</span></sc-if>
+          <button class="btn btn-icon btn-secondary" onClick="{{ s.onPlay }}" aria-label="השמעה" style="border-radius:50%"><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px;transform:scaleX(-1)"><path d="M6 3l14 9-14 9V3z"></path></svg></button>
+        </div>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ alarmOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;inset:0;z-index:40;background:{{ alarm.bg }};color:{{ alarm.fg }};display:flex;flex-direction:column;overflow:hidden">
+        <div style="position:absolute;right:-90px;top:-60px;width:260px;height:260px;border-radius:50%;background:{{ alarm.c2 }};opacity:.45"></div>
+        <div style="position:relative;padding:44px 28px 0;text-align:center">
+          <div style="font-size:14px;font-weight:600">{{ alarm.dateLabel }}</div>
+          <div style="font-family:var(--font-heading);font-size:76px;line-height:1">{{ alarm.time }}</div>
+        </div>
+        <div style="position:relative;height:190px;display:grid;place-items:center">
+          <span style="position:absolute;width:150px;height:150px;border-radius:50%;background:{{ alarm.c1 }};animation:ring 2s ease-out infinite"></span>
+          <span style="position:absolute;width:150px;height:150px;border-radius:50%;background:{{ alarm.c1 }};animation:ring 2s ease-out 1s infinite"></span>
+          <span style="position:relative;width:100px;height:100px;border-radius:50%;background:var(--color-bg);color:{{ alarm.icon }};display:grid;place-items:center"><svg class="i" viewBox="0 0 24 24" style="width:44px;height:44px;animation:wiggle 1.2s ease-in-out infinite"><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path><path d="M3.3 15.3A1 1 0 0 0 4 17h16a1 1 0 0 0 .7-1.7C19.4 14 18 12.5 18 8A6 6 0 0 0 6 8c0 4.5-1.4 6-2.7 7.3"></path></svg></span>
+        </div>
+        <div style="position:relative;padding:0 28px;text-align:center">
+          <div style="font-family:var(--font-heading);font-size:32px;line-height:1.15;text-wrap:pretty">{{ alarm.name }}</div>
+          <sc-if value="{{ alarm.hasNotes }}" hint-placeholder-val="{{ false }}"><div style="font-size:15px;margin-top:6px">{{ alarm.notes }}</div></sc-if>
+        </div>
+        <div style="position:relative;margin-top:auto;margin-inline:12px;margin-bottom:28px;background:var(--color-bg);color:var(--color-text);border-radius:32px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-weight:600">נודניק</span>
+            <div style="display:flex;align-items:center;gap:6px;direction:ltr">
+              <button class="btn btn-icon btn-secondary" onClick="{{ decSnooze }}" aria-label="פחות" style="width:32px;height:32px;border-radius:50%"><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M5 12h14"></path></svg></button>
+              <span dir="rtl" style="min-width:64px;text-align:center;font-family:var(--font-heading);font-size:18px">{{ snoozeMins }} דק׳</span>
+              <button class="btn btn-icon btn-secondary" onClick="{{ incSnooze }}" aria-label="יותר" style="width:32px;height:32px;border-radius:50%"><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <sc-for list="{{ snoozeOpts }}" as="o" hint-placeholder-count="4">
+              <button class="btn" onClick="{{ o.onClick }}" style="flex:1;padding:8px 0;font-size:14px;background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-secondary" onClick="{{ doSnooze }}" style="flex:1;padding:14px 0;font-size:15px">נודניק</button>
+            <button class="btn btn-primary" onClick="{{ doDone }}" style="flex:1.6;padding:14px 0;font-size:15px"><svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M20 6 9 17l-5-5"></path></svg>{{ alarm.doneLabel }}</button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ showDemo }}" hint-placeholder-val="{{ true }}">
+    <div style="width:240px;display:flex;flex-direction:column;gap:10px">
+      <div style="font-family:var(--font-heading);font-size:18px">Prototype controls</div>
+      <p style="margin:0;font-size:13px;color:var(--color-neutral-700);text-wrap:pretty">Simulated “now”: Tue 13 Oct, 16:20. Tap a reminder to edit it. Sounds play through your speakers.</p>
+      <button class="btn btn-primary" onClick="{{ fireNext }}" style="justify-content:flex-start;padding:11px 16px"><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path><path d="M3.3 15.3A1 1 0 0 0 4 17h16a1 1 0 0 0 .7-1.7C19.4 14 18 12.5 18 8A6 6 0 0 0 6 8c0 4.5-1.4 6-2.7 7.3"></path></svg>Fire next alarm</button>
+      <button class="btn btn-secondary" onClick="{{ clearAll }}" style="justify-content:flex-start;padding:11px 16px">Show empty state</button>
+      <button class="btn btn-secondary" onClick="{{ resetData }}" style="justify-content:flex-start;padding:11px 16px">Reset sample data</button>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showDemoControls&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;startEmpty&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const DAYS=['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+const DSHORT=['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'];
+const MONTHS=['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+const NOW=new Date(2026,9,13,16,20);
+const SOUNDS=[
+  {id:'chime',name:'צלצול',desc:'רך ובהיר',notes:[880,1320],gap:.22,dur:.9,wave:'sine'},
+  {id:'bell',name:'פעמון',desc:'עמוק ומהדהד',notes:[523,523],gap:.6,dur:1.4,wave:'triangle'},
+  {id:'birds',name:'ציוץ ציפורים',desc:'עולה ויורד',notes:[2200,2600,2300,2800,2400],gap:.09,dur:.12,wave:'sine'},
+  {id:'pulse',name:'פעימה רכה',desc:'עדין להשכמה',notes:[392,392,392],gap:.35,dur:.25,wave:'sine'},
+  {id:'marimba',name:'מרימבה',desc:'שלושה צלילים',notes:[523,659,784],gap:.16,dur:.5,wave:'triangle'},
+  {id:'beep',name:'צפצוף',desc:'קלאסי וחד',notes:[1000,1000,1000,1000],gap:.18,dur:.1,wave:'square'}
+];
+const CATS=()=>[
+  {id:'family',name:'משפחה',color:'var(--color-accent-500)',sound:'chime',volume:70},
+  {id:'home',name:'בית',color:'var(--color-accent-2-500)',sound:'birds',volume:60},
+  {id:'health',name:'בריאות',color:'var(--color-accent-300)',sound:'marimba',volume:50},
+  {id:'money',name:'כספים',color:'var(--color-neutral-600)',sound:'bell',volume:80}
+];
+function tone(color){const m=/--color-(.+)-(\d00)\)/.exec(color||'')||[0,'accent','500'];const fam=m[1],st=+m[2];
+  const v=n=>`var(--color-${fam}-${Math.min(900,Math.max(100,n))})`;const light=st<=400;
+  return {bg:color,fg:light?v(900):'var(--color-bg)',c1:v(st-100),c2:v(st+100),pauseFg:light?v(900):'var(--color-bg)',btnFg:v(800),icon:v(700)};}
+const PALETTE=['var(--color-accent-500)','var(--color-accent-2-500)','var(--color-accent-300)','var(--color-neutral-600)','var(--color-accent-2-300)','var(--color-accent-700)','var(--color-accent-2-700)','var(--color-neutral-400)'];
+const SEED=()=>[
+  {id:1,name:'להתקשר לאמא',type:'once',date:'2026-10-13',day:2,time:'18:30',sound:null,volume:null,cat:'family',notes:'לשאול מה מביאים לשבת'},
+  {id:2,name:'להשקות את העציצים',type:'weekly',date:'2026-10-14',day:3,time:'08:00',sound:null,volume:null,cat:'home',notes:''},
+  {id:3,name:'לשלם שכר דירה',type:'once',date:'2026-10-15',day:4,time:'09:00',sound:null,volume:null,cat:'money',notes:'העברה לחשבון של בעל הדירה'},
+  {id:4,name:'שיעור יוגה',type:'weekly',date:'2026-10-15',day:4,time:'19:00',sound:null,volume:null,cat:'health',notes:''},
+  {id:5,name:'להוציא את הפחים',type:'weekly',date:'2026-10-18',day:0,time:'20:00',sound:'beep',volume:90,cat:'home',notes:''},
+  {id:6,name:'רופא שיניים',type:'once',date:'2026-10-26',day:1,time:'10:15',sound:null,volume:null,cat:'health',notes:''},
+  {id:9,name:'חוג גיטרה',type:'weekly',date:'2026-10-16',day:5,time:'14:00',sound:null,volume:null,cat:'family',notes:'הפסקה בחופש',paused:true},
+  {id:7,name:'לאסוף חבילה מהדואר',type:'once',date:'2026-10-10',day:6,time:'12:00',sound:null,volume:null,cat:'home',notes:'',archived:true,archivedAt:new Date(2026,9,10,12,4)},
+  {id:8,name:'לחדש דרכון',type:'once',date:'2026-10-05',day:1,time:'09:30',sound:null,volume:null,cat:'family',notes:'',archived:true,archivedAt:new Date(2026,9,5,9,41)}
+];
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const hm=d=>`${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const sameDay=(a,b)=>a.toDateString()===b.toDateString();
+function occ(r){
+  const [h,mi]=r.time.split(':').map(Number);
+  if(r.type==='once'){const [y,m,d]=r.date.split('-').map(Number);return new Date(y,m-1,d,h,mi);}
+  const d=new Date(NOW);d.setHours(h,mi,0,0);d.setDate(d.getDate()+((r.day-NOW.getDay()+7)%7));
+  if(d<=NOW)d.setDate(d.getDate()+7);
+  while(r.skipUntil&&d<=r.skipUntil)d.setDate(d.getDate()+7);
+  return d;
+}
+const nextAt=r=>r.snoozeUntil||occ(r);
+function relDay(d){const t=new Date(NOW);if(sameDay(d,t))return 'היום';t.setDate(t.getDate()+1);if(sameDay(d,t))return 'מחר';return null;}
+const shortDay=d=>relDay(d)||`${DSHORT[d.getDay()]} ${d.getDate()}.${d.getMonth()+1}`;
+const longDate=d=>relDay(d)||`יום ${DAYS[d.getDay()]}, ${d.getDate()} ב${MONTHS[d.getMonth()]}`;
+function rel(d){const m=Math.round((d-NOW)/60000);if(m<1)return 'עכשיו';if(m<60)return `בעוד ${m} דק׳`;if(m<1440){const h=Math.floor(m/60),mm=m%60;return `בעוד ${h} ש׳${mm?` ו-${mm} דק׳`:''}`;}const dd=Math.round(m/1440);return dd===1?'בעוד יום':`בעוד ${dd} ימים`;}
+const soundOf=id=>SOUNDS.find(s=>s.id===id)||SOUNDS[0];
+
+class Component extends DCLogic {
+  state={screen:'home',reminders:SEED(),cats:CATS(),catEdit:null,catDel:false,moveTo:null,nextCatId:1,defaultSnooze:10,
+    sheetOpen:false,draft:null,isEdit:false,showNotes:false,
+    sp:null,alarmId:null,snoozeMins:10,toast:null,toastUndo:false,nextId:100};
+
+  componentDidMount(){if(this.props.startEmpty)this.setState({reminders:this.state.reminders.filter(r=>r.archived)});}
+  componentDidUpdate(p){if(p.startEmpty!==this.props.startEmpty)this.setState({reminders:this.props.startEmpty?SEED().filter(r=>r.archived):SEED()});}
+  componentWillUnmount(){clearInterval(this.loop);clearTimeout(this.tt);}
+
+  play(id,vol){
+    try{
+      const s=soundOf(id);const ctx=this.ctx||(this.ctx=new (window.AudioContext||window.webkitAudioContext)());
+      let t=ctx.currentTime+.02;const peak=Math.max(.0002,.3*(vol??70)/100);
+      s.notes.forEach(f=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=s.wave;o.frequency.value=f;
+        g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+s.dur);
+        o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+s.dur+.05);t+=s.gap;});
+    }catch(e){}
+  }
+  cat(id){return this.state.cats.find(c=>c.id===id)||{id:null,name:'',color:'var(--color-neutral-300)',sound:'chime',volume:70};}
+  eff(r){const c=this.cat(r.cat);return {sound:r.sound??c.sound,volume:r.volume??c.volume};}
+  showToast(text,undo){clearTimeout(this.tt);this.setState({toast:text,toastUndo:!!undo});this.tt=setTimeout(()=>this.setState({toast:null}),4000);}
+  snapshot(){this.undoSnap=this.state.reminders.map(r=>({...r}));}
+  update(id,fn){this.setState(s=>({reminders:s.reminders.map(r=>r.id===id?fn({...r}):r)}));}
+
+  markDone(id){
+    const r=this.state.reminders.find(x=>x.id===id);if(!r)return;this.snapshot();
+    if(r.type==='once'){this.update(id,x=>({...x,archived:true,archivedAt:new Date(NOW),snoozeUntil:null}));this.showToast('הועבר לארכיון',true);}
+    else{const o=occ(r);this.update(id,x=>({...x,skipUntil:o,snoozeUntil:null}));this.showToast(`נתראה ביום ${DAYS[r.day]} הבא`,true);}
+  }
+  snooze(id,mins){
+    const r=this.state.reminders.find(x=>x.id===id);if(!r)return;this.snapshot();
+    const until=new Date(nextAt(r).getTime()+mins*60000);this.update(id,x=>({...x,snoozeUntil:until}));
+    this.showToast(`נודניק עד ${hm(until)}`,true);
+  }
+  setPaused(id,on){
+    const r=this.state.reminders.find(x=>x.id===id);if(!r)return;this.snapshot();
+    this.update(id,x=>({...x,paused:on,snoozeUntil:null}));
+    if(!on&&r.type==='once'&&occ(r)<NOW){this.openEditor({...r,paused:false});this.showToast('המועד עבר — בחרו מועד חדש');return;}
+    this.showToast(on?`„${r.name}” בהשהיה`:`„${r.name}” חזרה לפעול`,true);
+  }
+  closeAlarm(){clearInterval(this.loop);this.setState({alarmId:null});}
+
+  openEditor(r){
+    const isEdit=!!r;
+    const draft=r?{...r}:{id:null,name:'',type:'once',date:'2026-10-14',day:3,time:'09:00',sound:null,volume:null,cat:null,notes:''};
+    if(r&&r.type==='once'&&occ(r)<NOW){const t=new Date(NOW);t.setDate(t.getDate()+1);draft.date=ymd(t);}
+    this.setState({sheetOpen:true,draft,isEdit,showNotes:!!draft.notes});
+  }
+  setDraft(patch){this.setState(s=>({draft:{...s.draft,...patch}}));}
+  save(){
+    const d=this.state.draft;if(!d||!d.name.trim()||!d.cat)return;
+    if(d.type==='once'){const [y,m,dd]=d.date.split('-').map(Number);d.day=new Date(y,m-1,dd).getDay();}
+    const clean={...d,name:d.name.trim(),snoozeUntil:null,skipUntil:null,archived:false,archivedAt:null};
+    this.setState(s=>{
+      if(s.isEdit)return {reminders:s.reminders.map(r=>r.id===d.id?clean:r),sheetOpen:false};
+      return {reminders:[...s.reminders,{...clean,id:s.nextId}],nextId:s.nextId+1,sheetOpen:false};
+    });
+    this.showToast(this.state.isEdit?'התזכורת עודכנה':'התזכורת נשמרה');
+  }
+
+  renderVals(){
+    const s=this.state;
+    const active=s.reminders.filter(r=>!r.archived).map(r=>({r,at:nextAt(r)})).sort((a,b)=>a.at-b.at);
+    const archivedList=s.reminders.filter(r=>r.archived).sort((a,b)=>b.archivedAt-a.archivedAt);
+    const hasActive=active.length>0;
+    const fId=s.cats.some(c=>c.id===s.filter)?s.filter:null;
+    const shown=fId?active.filter(x=>x.r.cat===fId):active;
+    const h=shown[0];const ht=h?tone(this.cat(h.r.cat).color):{};
+    const hero=h?{name:h.r.name,countdown:rel(h.at),when:`${relDay(h.at)?relDay(h.at)+' ב-':longDate(h.at)+' · '}${hm(h.at)}`,time:hm(h.at),
+      typeLabel:h.r.type==='once'?'חד-פעמית':`כל יום ${DAYS[h.r.day]}`,snoozed:!!h.r.snoozeUntil,
+      onOpen:()=>this.openEditor(h.r),onDone:e=>{e.stopPropagation();this.markDone(h.r.id);},onPause:e=>{e.stopPropagation();this.setPaused(h.r.id,true);},onResume:e=>{e.stopPropagation();this.setPaused(h.r.id,false);},
+      paused:!!h.r.paused,active:!h.r.paused,kicker:h.r.paused?'בהשהיה · לא תופעל':`הבא בתור · ${rel(h.at)}`,
+      bg:h.r.paused?'var(--color-neutral-300)':ht.bg,fg:h.r.paused?'var(--color-neutral-800)':ht.fg,
+      c1:h.r.paused?'var(--color-neutral-200)':ht.c1,c2:h.r.paused?'var(--color-neutral-400)':ht.c2,btnFg:ht.btnFg,pauseFg:ht.pauseFg}:{};
+    const later=shown.slice(1).map(({r,at})=>({key:r.id,name:r.name,time:hm(at),dayLabel:r.type==='weekly'&&!r.snoozeUntil&&!relDay(at)?`כל ${DSHORT[r.day]}`:shortDay(at),
+      color:r.paused?'var(--color-neutral-300)':this.cat(r.cat).color,weekly:r.type==='weekly',snoozed:!!r.snoozeUntil,
+      paused:!!r.paused,active:!r.paused,fg:r.paused?'var(--color-neutral-500)':'var(--color-text)',iconFg:r.paused?'var(--color-neutral-500)':'var(--color-neutral-700)',
+      rowBg:r.paused?'var(--color-neutral-200)':'transparent',
+      onOpen:()=>this.openEditor(r),onPause:e=>{e.stopPropagation();this.setPaused(r.id,true);},onResume:e=>{e.stopPropagation();this.setPaused(r.id,false);}}));
+    const archived=archivedList.map(r=>({key:r.id,name:r.name,color:this.cat(r.cat).color,when:shortDay(occ(r))+' '+r.time,
+      doneLabel:shortDay(r.archivedAt),
+      onRestore:()=>{this.update(r.id,x=>({...x,archived:false,archivedAt:null}));this.setState({screen:'home'});this.openEditor({...r,archived:false});},
+      onDelete:()=>{this.snapshot();this.setState(st=>({reminders:st.reminders.filter(x=>x.id!==r.id)}));this.showToast('נמחק לצמיתות',true);}}));
+    const navOn={bg:'var(--color-accent-200)',fg:'var(--color-accent-800)'},navOff={bg:'transparent',fg:'var(--color-neutral-700)'};
+    const nv=k=>(s.screen===k||(k==='settings'&&s.screen==='archive'))?navOn:navOff;
+    const d=s.draft||{name:'',type:'once',date:'2026-10-14',day:3,time:'09:00',sound:null,volume:null,cat:null,notes:''};
+    const isOnce=d.type==='once';
+    let summary;
+    if(isOnce){const [y,m,dd]=(d.date||'2026-10-14').split('-').map(Number);const dt=new Date(y,m-1,dd);summary=`${longDate(dt)} ב-${d.time}`;}
+    else summary=`כל יום ${DAYS[d.day]} ב-${d.time}`;
+    const sel=(on,bg,fg,ring)=>on?{bg,fg,ring:`inset 0 0 0 2px ${ring}`}:{bg:'var(--color-surface)',fg:'var(--color-text)',ring:'none'};
+    const o=sel(isOnce,'var(--color-accent-200)','var(--color-accent-900)','var(--color-accent-600)');
+    const w=sel(!isOnce,'var(--color-accent-2-200)','var(--color-accent-2-900)','var(--color-accent-2-600)');
+    const spCat=s.sp==='cat';
+    const ce=s.catEdit;
+    const dc=this.cat(d.cat);
+    const dEff={sound:d.sound??dc.sound,volume:d.volume??dc.volume};
+    const curSound=spCat?(ce?ce.sound:'chime'):dEff.sound;
+    const setCat=p=>this.setState(st=>({catEdit:{...st.catEdit,...p}}));
+    const usesCat=id=>s.reminders.filter(r=>!r.archived&&r.cat===id);
+    const hasOverride=d.sound!=null||d.volume!=null;
+    const chip=(on)=>on?{bg:'var(--color-accent)',fg:'var(--color-bg)'}:{bg:'var(--color-surface)',fg:'var(--color-text)'};
+    const ar=s.alarmId&&s.reminders.find(r=>r.id===s.alarmId);
+    const arAt=ar&&nextAt(ar);const at=ar?tone(this.cat(ar.cat).color):{};
+    return {
+      isHome:s.screen==='home',isArchive:s.screen==='archive',isSettings:s.screen==='settings',isCats:s.screen==='cats',
+      hasActive,isEmpty:!hasActive,hasShown:shown.length>0,noneInFilter:hasActive&&!shown.length,filterName:fId?this.cat(fId).name:'',
+      clearFilter:()=>this.setState({filter:null}),
+      filters:[{key:'all',label:'הכל',hasDot:false,color:'',on:!fId,id:null},...s.cats.map(c=>({key:c.id,label:c.name,hasDot:true,color:c.color,on:fId===c.id,id:c.id}))]
+        .map(x=>({...x,bg:x.on?'var(--color-text)':'var(--color-surface)',fg:x.on?'var(--color-bg)':'var(--color-text)',onClick:()=>this.setState({filter:x.id})})),showFab:hasActive,hero,later,hasLater:later.length>0,
+      archived,archiveEmpty:archived.length===0,archiveCount:archived.length,archiveSub:archived.length?(archived.length===1?'תזכורת חד-פעמית אחת שהושלמה':`${archived.length} תזכורות חד-פעמיות שהושלמו`):'ריק',hasArchiveCount:archived.length>0,
+      nav:{homeBg:nv('home').bg,homeFg:nv('home').fg,archBg:nv('archive').bg,archFg:nv('archive').fg,setBg:nv('settings').bg,setFg:nv('settings').fg,catBg:nv('cats').bg,catFg:nv('cats').fg},goCats:()=>this.setState({screen:'cats'}),
+      goHome:()=>this.setState({screen:'home'}),goArchive:()=>this.setState({screen:'archive'}),goSettings:()=>this.setState({screen:'settings'}),
+      openNew:()=>this.openEditor(null),
+      sheetT:s.sheetOpen?'translateY(0)':'translateY(105%)',sheetBdO:s.sheetOpen?.5:0,sheetPE:s.sheetOpen?'auto':'none',
+      closeSheet:()=>this.setState({sheetOpen:false}),
+      sheetTitle:s.isEdit?'עריכת תזכורת':'תזכורת חדשה',isEdit:s.isEdit,isNew:!s.isEdit,
+      deleteDraft:()=>{this.snapshot();this.setState(st=>({reminders:st.reminders.filter(x=>x.id!==d.id),sheetOpen:false}));this.showToast('התזכורת נמחקה',true);},
+      draft:d,isOnce,isWeekly:!isOnce,summary,
+      tiles:{onceBg:o.bg,onceFg:o.fg,onceRing:o.ring,weeklyBg:w.bg,weeklyFg:w.fg,weeklyRing:w.ring},
+      setOnce:()=>this.setDraft({type:'once'}),setWeekly:()=>this.setDraft({type:'weekly'}),
+      onName:e=>this.setDraft({name:e.target.value}),onDate:e=>this.setDraft({date:e.target.value}),onTime:e=>this.setDraft({time:e.target.value}),
+      onVolume:e=>this.setDraft({volume:+e.target.value,sound:dEff.sound}),onNotes:e=>this.setDraft({notes:e.target.value}),
+      days:DSHORT.map((l,i)=>{const on=d.day===i;return {label:l,bg:on?'var(--color-accent-2-600)':'var(--color-surface)',fg:on?'var(--color-bg)':'var(--color-text)',onClick:()=>this.setDraft({day:i})};}),
+      cats:s.cats.map(c=>{const on=d.cat===c.id;return {name:c.name,color:c.color,bg:on?'var(--color-bg)':'var(--color-surface)',ring:on?'inset 0 0 0 2px var(--color-text)':'none',onClick:()=>this.setDraft({cat:c.id})};}),
+      catHint:d.cat?`יופעל עם ${soundOf(dc.sound).name} · ${dc.volume}% (ברירת המחדל של ${dc.name})`:'הצליל והעוצמה נקבעים לפי הקטגוריה',
+      soundSub:hasOverride?'מותאם לתזכורת זו':`לפי ${dc.name}: ${soundOf(dc.sound).name} · ${dc.volume}%`,
+      hasOverride,sw:{bg:hasOverride?'var(--color-accent)':'var(--color-neutral-400)',jc:hasOverride?'flex-end':'flex-start'},
+      toggleOverride:()=>hasOverride?this.setDraft({sound:null,volume:null}):this.setDraft({sound:dc.sound,volume:dc.volume}),
+      draftVolume:dEff.volume,
+      catList:s.cats.map(c=>{const n=usesCat(c.id).length;return {key:c.id,name:c.name,color:c.color,soundName:soundOf(c.sound).name,volume:c.volume,
+        count:n===0?'אין תזכורות':n===1?'תזכורת אחת':`${n} תזכורות`,onOpen:()=>this.setState({catEdit:{...c},catDel:false,moveTo:null})};}),
+      newCat:()=>{const used=s.cats.map(c=>c.color);this.setState({catEdit:{id:null,name:'',color:PALETTE.find(p=>!used.includes(p))||PALETTE[0],sound:'chime',volume:70},catDel:false,moveTo:null});},
+      catT:ce?'translateY(0)':'translateY(105%)',catBdO:ce?.5:0,catPE:ce?'auto':'none',closeCat:()=>this.setState({catEdit:null,catDel:false}),
+      catSheet:ce?(()=>{const isNewC=!ce.id,all=isNewC?[]:usesCat(ce.id),own=all.filter(r=>r.sound!=null||r.volume!=null).length,inh=all.length-own;
+        const allAny=isNewC?[]:s.reminders.filter(r=>r.cat===ce.id),orig=isNewC?null:this.cat(ce.id);
+        const nTxt=n=>n===1?'תזכורת אחת':n+' תזכורות';
+        return {title:isNewC?'קטגוריה חדשה':(orig.name||'קטגוריה'),name:ce.name,color:ce.color,soundName:soundOf(ce.sound).name,volume:ce.volume,
+        canDelete:!isNewC&&s.cats.length>1&&!s.catDel,saveLabel:isNewC?'יצירת קטגוריה':'שמירה',
+        note:all.length?`חל על ${nTxt(inh)} בקטגוריה.${own?` ${own===1?'תזכורת אחת מותאמת':own+' תזכורות מותאמות'} אישית ולא תושפע.`:''}`:'כל תזכורת בקטגוריה הזו תקבל את הצליל והעוצמה האלה, אלא אם תותאם אישית.',
+        needsMove:allAny.length>0,delTitle:`למחוק את „${orig?orig.name:''}”?`,
+        delNote:allAny.length?`בקטגוריה יש ${nTxt(allAny.length)}. בחרו לאן להעביר אותן:`:'אין תזכורות בקטגוריה הזו.',
+        delCta:allAny.length?'העברה ומחיקה':'מחיקה'};})():{},
+      catFormOpen:!s.catDel,catDelOpen:!!s.catDel,
+      catSaveDisabled:!ce||!ce.name.trim(),
+      onCatName:e=>setCat({name:e.target.value}),
+      catColors:PALETTE.map(p=>({color:p,ring:ce&&ce.color===p?'0 0 0 3px var(--color-bg), 0 0 0 5px var(--color-text)':'none',onClick:()=>setCat({color:p})})),
+      saveCat:()=>{if(!ce||!ce.name.trim())return;const c={...ce,name:ce.name.trim()};
+        if(c.id)this.setState(st=>({cats:st.cats.map(x=>x.id===c.id?c:x),catEdit:null}));
+        else this.setState(st=>({cats:[...st.cats,{...c,id:'c'+st.nextCatId}],nextCatId:st.nextCatId+1,catEdit:null}));
+        this.showToast(c.id?'הקטגוריה עודכנה':`הקטגוריה „${c.name}” נוצרה`);},
+      askDelCat:()=>this.setState({catDel:true,moveTo:null}),cancelDelCat:()=>this.setState({catDel:false,moveTo:null}),
+      moveTargets:ce&&ce.id?s.cats.filter(c=>c.id!==ce.id).map(c=>{const on=s.moveTo===c.id;return {key:c.id,name:c.name,color:c.color,bg:on?'var(--color-bg)':'var(--color-surface)',ring:on?'inset 0 0 0 2px var(--color-text)':'none',onClick:()=>this.setState({moveTo:c.id})};}):[],
+      delDisabled:!!(ce&&ce.id&&s.reminders.some(r=>r.cat===ce.id)&&!s.moveTo),
+      confirmDelCat:()=>{if(!ce||!ce.id)return;const id=ce.id,to=s.moveTo,nm=this.cat(id).name;
+        this.setState(st=>({cats:st.cats.filter(c=>c.id!==id),reminders:st.reminders.map(r=>r.cat===id?{...r,cat:to}:r),catEdit:null,catDel:false,moveTo:null}));
+        this.showToast(`„${nm}” נמחקה`);},
+      openCatSound:()=>this.setState({sp:'cat'}),onCatVolume:e=>setCat({volume:+e.target.value}),
+      showNotes:s.showNotes,hideNotes:!s.showNotes,addNote:()=>this.setState({showNotes:true}),
+      draftSoundName:soundOf(dEff.sound).name,
+      openSound:()=>this.setState({sp:'draft'}),
+      saveDisabled:!d.name.trim()||!d.cat,saveHint:!d.name.trim()&&!d.cat?'יש להזין שם ולבחור קטגוריה':!d.name.trim()?'יש להזין שם':'יש לבחור קטגוריה',save:()=>this.save(),
+      spT:s.sp?'translateY(0)':'translateY(105%)',spBdO:s.sp?.5:0,spPE:s.sp?'auto':'none',closeSound:()=>this.setState({sp:null}),
+      spTitle:spCat&&ce?(ce.name.trim()?`צליל לקטגוריה ${ce.name.trim()}`:'צליל לקטגוריה'):'בחירת צליל',
+      sounds:SOUNDS.map(x=>{const on=x.id===curSound;const vol=spCat?(ce?ce.volume:70):dEff.volume;return {name:x.name,desc:x.desc,isDefault:!spCat&&x.id===dc.sound,defaultLabel:`ברירת מחדל · ${dc.name}`,
+        rowBg:on?'var(--color-accent-100)':'transparent',dotBorder:on?'var(--color-accent)':'var(--color-neutral-400)',dotFill:on?'var(--color-accent)':'transparent',
+        onPick:()=>{if(spCat)setCat({sound:x.id});else this.setDraft({sound:x.id,volume:dEff.volume});this.play(x.id,vol);},
+        onPlay:e=>{e.stopPropagation();this.play(x.id,vol);}};}),
+      snoozeSetting:[5,10,15,30].map(m=>{const c=chip(s.defaultSnooze===m);return {label:`${m} דק׳`,bg:c.bg,fg:c.fg,onClick:()=>this.setState({defaultSnooze:m})};}),
+      alarmOpen:!!ar,
+      alarm:ar?{name:ar.name,time:hm(arAt),dateLabel:longDate(arAt),notes:ar.notes,hasNotes:!!ar.notes,doneLabel:ar.type==='once'?'סיימתי · לארכיון':'סיימתי',bg:at.bg,fg:at.fg,c1:at.c1,c2:at.c2,icon:at.icon}:{},
+      snoozeMins:s.snoozeMins,
+      snoozeOpts:[5,10,15,30].map(m=>{const c=chip(s.snoozeMins===m);return {label:`${m}`,bg:c.bg,fg:c.fg,onClick:()=>this.setState({snoozeMins:m})};}),
+      incSnooze:()=>this.setState(st=>({snoozeMins:Math.min(120,st.snoozeMins+1)})),decSnooze:()=>this.setState(st=>({snoozeMins:Math.max(1,st.snoozeMins-1)})),
+      doSnooze:()=>{this.snooze(ar.id,s.snoozeMins);this.closeAlarm();},doDone:()=>{this.markDone(ar.id);this.closeAlarm();},
+      toastText:s.toast||'',toastUndo:s.toastUndo,toastT:s.toast?'translateY(0)':'translateY(20px)',toastO:s.toast?1:0,toastPE:s.toast?'auto':'none',
+      undo:()=>{if(this.undoSnap)this.setState({reminders:this.undoSnap,toast:null});this.undoSnap=null;},
+      showDemo:this.props.showDemoControls??true,
+      fireNext:()=>{const n=active.find(x=>!x.r.paused);if(!n)return;this.setState({alarmId:n.r.id,snoozeMins:s.defaultSnooze,sheetOpen:false,sp:null,catEdit:null});const ef=this.eff(n.r);this.play(ef.sound,ef.volume);clearInterval(this.loop);this.loop=setInterval(()=>this.play(ef.sound,ef.volume),2600);},
+      clearAll:()=>{this.closeAlarm();this.setState(st=>({reminders:st.reminders.filter(r=>r.archived),screen:'home',sheetOpen:false}));},
+      resetData:()=>{this.closeAlarm();this.setState({reminders:SEED(),cats:CATS(),catEdit:null,screen:'home',sheetOpen:false,sp:null,toast:null});}
+    };
+  }
+}
+</script>
+</body>
+</html>

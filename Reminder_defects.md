@@ -13,13 +13,16 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## ##########################################
 
 ## Active
-2. The android bottom bar (with the 3 buttons for apps,home,back) is hiding some of the bottom buttons of this app. I want the screen not to span below these buttons.
-3. When creating a new reminder, the keyboard is hiding the control so the user can't see what he is typing.
+4. When a reminder is showing as a notification, its title should tell the name of the alarm.
+5. When a reminder is fired as a notification, the user should be able to mark it complete within the notification itself.
+6. The days of week presented for recurring reminder should start from right to left
 
 ## ❔Ready for Testing
-1. When trying to pick a different sound for a reminder or a category, the app crashes.
+2. The android bottom bar (with the 3 buttons for apps,home,back) is hiding some of the bottom buttons of this app. I want the screen not to span below these buttons.
 
 ## ❌ Failed in retest
+1. When trying to pick a different sound for a reminder or a category, the app crashes. - Still!. 
 
 
 ## ✔️Manually verified
+3. When creating a new reminder, the keyboard is hiding the control so the user can't see what he is typing.

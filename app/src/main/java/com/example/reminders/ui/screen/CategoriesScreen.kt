@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reminders.ui.component.CategoryCard
-import com.example.reminders.ui.component.NewCategoryCard
+import com.example.reminders.ui.component.NewCategoryButton
 import com.example.reminders.ui.sheet.CategorySheet
 import com.example.reminders.ui.theme.*
 import com.example.reminders.viewmodel.CategoriesViewModel
@@ -37,12 +37,11 @@ fun CategoriesScreen(
 
     LazyColumn(
         contentPadding = PaddingValues(bottom = 110.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(0.dp)
     ) {
         item {
-            Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 20.dp, bottom = 14.dp)) {
+            Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 20.dp, bottom = 16.dp)) {
                 Text("קטגוריות", style = AppTypography.headlineLarge, color = TextColor)
-                Text("צליל ועוצמה ברירת מחדל לכל קטגוריה", style = AppTypography.bodyMedium, color = Neutral700)
             }
         }
 
@@ -55,17 +54,18 @@ fun CategoriesScreen(
                     editCategoryId = cat.id
                     showSheet = true
                 },
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 12.dp)
             )
+            Spacer(Modifier.height(2.dp))
         }
 
         item {
-            NewCategoryCard(
+            NewCategoryButton(
                 onClick = {
                     editCategoryId = null
                     showSheet = true
                 },
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(start = 12.dp)
             )
         }
     }

@@ -22,7 +22,7 @@ private val AppColorScheme = lightColorScheme(
     onSurface = TextColor,
     surfaceVariant = Neutral200,
     onSurfaceVariant = Neutral700,
-    outline = Neutral400,
+    outline = Neutral300,
     error = Accent700,
     onError = Bg
 )
