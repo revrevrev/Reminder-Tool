@@ -31,7 +31,7 @@ class ReminderRepository @Inject constructor(private val dao: ReminderDao) {
                 updated
             }
             ReminderType.WEEKLY -> {
-                val occurrence = DateTimeUtil.currentOccurrenceMs(reminder)
+                val occurrence = DateTimeUtil.currentOccurrenceMs(reminder, nowMs)
                 val updated = reminder.copy(skipUntil = occurrence, snoozeUntil = null)
                 dao.update(updated)
                 updated

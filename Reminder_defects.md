@@ -15,9 +15,9 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## Active
 4. When a reminder is showing as a notification, its title should tell the name of the alarm.
 5. When a reminder is fired as a notification, the user should be able to mark it complete within the notification itself.
-8. When dismissing a weekly reminder it keeps it as up next, which is wrong, as next time it should fire only next week. 
 
 ## ❔Ready for Testing
+8. When dismissing a weekly reminder it keeps it as up next, which is wrong, as next time it should fire only next week. 
 7. The app allows to set an alarm for a past date/time. Should prevent. To make it wasy, the default time will be the upcoming שעה עגולה
 6. The days of week presented for recurring reminder should start from right to left
 

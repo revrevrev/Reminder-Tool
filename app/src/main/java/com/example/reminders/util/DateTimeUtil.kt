@@ -25,12 +25,35 @@ object DateTimeUtil {
         }
     }
 
-    // Returns the epoch-ms of the "current" occurrence (for weekly done = skipUntil target)
-    fun currentOccurrenceMs(reminder: Reminder): Long {
+    // Returns the epoch-ms of the occurrence being completed (for weekly done = skipUntil target).
+    // Uses the occurrence NEAREST to nowMs so that marking done before the alarm fires still
+    // skips this week's occurrence, not last week's.
+    fun currentOccurrenceMs(reminder: Reminder, nowMs: Long = System.currentTimeMillis()): Long {
         if (reminder.type == ReminderType.ONCE) return parseDateTimeMs(reminder.date!!, reminder.time)
-        val now = System.currentTimeMillis()
-        // The occurrence that just fired = the most recent one at or before now
-        return latestWeeklyOccurrenceAtOrBefore(reminder, now)
+        return nearestWeeklyOccurrenceMs(reminder, nowMs)
+    }
+
+    // Returns the weekly occurrence whose epoch-ms is closest to nowMs (past or future).
+    private fun nearestWeeklyOccurrenceMs(reminder: Reminder, nowMs: Long): Long {
+        val day = reminder.day ?: 0
+        val time = LocalTime.parse(reminder.time)
+        val now = LocalDateTime.ofInstant(java.time.Instant.ofEpochMilli(nowMs), ZoneId.systemDefault())
+        val targetDow = intToDayOfWeek(day)
+
+        // Most-recent occurrence at or before nowMs
+        var past = now.with(TemporalAdjusters.previousOrSame(targetDow))
+            .withHour(time.hour).withMinute(time.minute).withSecond(0).withNano(0)
+        if (past.isAfter(now)) past = past.minusWeeks(1)
+
+        // Next occurrence strictly after nowMs
+        var future = now.with(TemporalAdjusters.nextOrSame(targetDow))
+            .withHour(time.hour).withMinute(time.minute).withSecond(0).withNano(0)
+        if (!future.isAfter(now)) future = future.plusWeeks(1)
+
+        val pastMs = past.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val futureMs = future.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+        return if (nowMs - pastMs <= futureMs - nowMs) pastMs else futureMs
     }
 
     // Next occurrence strictly after `after`, respecting skipUntil
