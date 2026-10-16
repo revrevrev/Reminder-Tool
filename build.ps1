@@ -138,7 +138,8 @@ $exitCode = $LASTEXITCODE
 # --- 5. Result ----------------------------------------------------------------
 Write-Host ""
 if ($exitCode -eq 0) {
-    Write-Ok "Build succeeded!"
+    $buildTime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    Write-Ok "Build succeeded!  [$buildTime]"
     $apkDir = Join-Path $ProjectRoot "app\build\outputs\apk"
     $apks   = Get-ChildItem -Path $apkDir -Filter "*.apk" -Recurse -ErrorAction SilentlyContinue |
               Sort-Object LastWriteTime -Descending

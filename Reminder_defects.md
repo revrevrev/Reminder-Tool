@@ -13,8 +13,10 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## ##########################################
 
 ## Active
+10. When clicking the triangle next to a sound in the list for selection, it doesn't play the sound as you would expect.
 
 ## ❔Ready for Testing
+9. When opening a category for editing, I have to scroll it to see the full editing page
 5. When a reminder is fired as a notification, the user should be able to mark it complete within the notification itself.
 4. When a reminder is showing as a notification, it should show the name of the alarm and its category.
 8. When dismissing a weekly reminder it keeps it as up next, which is wrong, as next time it should fire only next week. 

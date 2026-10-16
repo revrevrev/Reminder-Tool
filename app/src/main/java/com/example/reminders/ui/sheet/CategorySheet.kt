@@ -47,6 +47,7 @@ fun CategorySheet(
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         containerColor = Bg,
         shape = SheetShape
     ) {
