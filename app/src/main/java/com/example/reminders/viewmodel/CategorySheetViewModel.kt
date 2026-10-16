@@ -17,7 +17,8 @@ data class CategoryDraft(
     val name: String = "",
     val color: String = CATEGORY_COLORS[0],
     val sound: String = "chime",
-    val volume: Int = 70
+    val volume: Int = 70,
+    val continuous: Boolean = false
 )
 
 @HiltViewModel
@@ -54,7 +55,7 @@ class CategorySheetViewModel @Inject constructor(
                 return@launch
             }
             val cat = categoryRepo.getById(id) ?: return@launch
-            _draft.value = CategoryDraft(id = cat.id, name = cat.name, color = cat.color, sound = cat.sound, volume = cat.volume)
+            _draft.value = CategoryDraft(id = cat.id, name = cat.name, color = cat.color, sound = cat.sound, volume = cat.volume, continuous = cat.continuous)
             _canDelete.value = categoryRepo.count() > 1
             // Count reminders including archived
             // simplified: just check if any reminders use this category
@@ -65,6 +66,7 @@ class CategorySheetViewModel @Inject constructor(
     fun updateColor(v: String) { _draft.value = _draft.value.copy(color = v) }
     fun updateSound(v: String) { _draft.value = _draft.value.copy(sound = v) }
     fun updateVolume(v: Int) { _draft.value = _draft.value.copy(volume = v) }
+    fun updateContinuous(v: Boolean) { _draft.value = _draft.value.copy(continuous = v) }
 
     fun enterDeleteMode() { _deleteMode.value = true }
     fun exitDeleteMode() { _deleteMode.value = false; _moveTarget.value = null }
@@ -74,7 +76,7 @@ class CategorySheetViewModel @Inject constructor(
         val d = _draft.value
         if (d.name.isBlank()) return
         viewModelScope.launch {
-            val cat = Category(id = d.id, name = d.name.trim(), color = d.color, sound = d.sound, volume = d.volume)
+            val cat = Category(id = d.id, name = d.name.trim(), color = d.color, sound = d.sound, volume = d.volume, continuous = d.continuous)
             categoryRepo.save(cat)
             onComplete()
         }

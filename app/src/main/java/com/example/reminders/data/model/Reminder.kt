@@ -19,6 +19,7 @@ data class Reminder(
     val categoryId: Int,
     val sound: String? = null,        // null = inherit from category
     val volume: Int? = null,          // null = inherit from category
+    val continuous: Boolean? = null,  // null = inherit from category
     val notes: String? = null,
     val paused: Boolean = false,
     val snoozeUntil: Long? = null,    // epoch millis

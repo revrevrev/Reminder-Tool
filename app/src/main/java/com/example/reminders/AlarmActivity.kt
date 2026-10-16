@@ -29,7 +29,8 @@ class AlarmActivity : ComponentActivity() {
         // Start alarm sound
         val effectiveSound = vm.effectiveSound()
         val effectiveVolume = vm.effectiveVolume()
-        SoundPlayer.startAlarm(this, effectiveSound, effectiveVolume)
+        val effectiveContinuous = vm.effectiveContinuous()
+        SoundPlayer.startAlarm(this, effectiveSound, effectiveVolume, effectiveContinuous)
 
         setContent {
             RemindersTheme {

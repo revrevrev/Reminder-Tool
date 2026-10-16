@@ -54,9 +54,9 @@ fun CategoryCard(
             Text(text = countText, style = AppTypography.labelMedium, color = Neutral700)
         }
 
-        // Trailing: sound name only
+        // Trailing: sound name, with " · רציף" suffix when continuous
         Text(
-            text = category.sound,
+            text = if (category.continuous) "${category.sound} · רציף" else category.sound,
             style = AppTypography.bodySmall,
             color = Neutral700
         )

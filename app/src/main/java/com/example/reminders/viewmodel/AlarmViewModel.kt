@@ -74,4 +74,9 @@ class AlarmViewModel @Inject constructor(
         val r = _state.value.reminder ?: return 70
         return r.volume ?: _state.value.category?.volume ?: 70
     }
+
+    fun effectiveContinuous(): Boolean {
+        val r = _state.value.reminder ?: return false
+        return r.continuous ?: _state.value.category?.continuous ?: false
+    }
 }

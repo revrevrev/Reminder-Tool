@@ -20,6 +20,7 @@ object AppModule {
     @Singleton
     fun provideDatabase(@ApplicationContext ctx: Context): AppDatabase =
         Room.databaseBuilder(ctx, AppDatabase::class.java, "reminders.db")
+            .addMigrations(AppDatabase.MIGRATION_1_2)
             .addCallback(AppDatabase.seedCallback())
             .build()
 

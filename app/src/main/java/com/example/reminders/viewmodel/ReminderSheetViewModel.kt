@@ -25,6 +25,7 @@ data class ReminderDraft(
     val categoryId: Int? = null,
     val sound: String? = null,
     val volume: Int? = null,
+    val continuous: Boolean? = null,
     val notes: String? = null,
     val soundOverrideEnabled: Boolean = false
 )
@@ -62,8 +63,8 @@ class ReminderSheetViewModel @Inject constructor(
                 date = r.date ?: DateTimeUtil.todayDateString(),
                 day = r.day, time = r.time,
                 categoryId = r.categoryId,
-                sound = r.sound, volume = r.volume, notes = r.notes,
-                soundOverrideEnabled = r.sound != null || r.volume != null
+                sound = r.sound, volume = r.volume, continuous = r.continuous, notes = r.notes,
+                soundOverrideEnabled = r.sound != null || r.volume != null || r.continuous != null
             )
         }
     }
@@ -76,13 +77,25 @@ class ReminderSheetViewModel @Inject constructor(
     fun updateCategory(id: Int) { _draft.value = _draft.value.copy(categoryId = id) }
     fun updateSound(v: String) { _draft.value = _draft.value.copy(sound = v) }
     fun updateVolume(v: Int) { _draft.value = _draft.value.copy(volume = v) }
+    fun updateContinuous(v: Boolean) { _draft.value = _draft.value.copy(continuous = v) }
     fun updateNotes(v: String?) { _draft.value = _draft.value.copy(notes = v) }
     fun setSoundOverride(enabled: Boolean) {
-        _draft.value = _draft.value.copy(
-            soundOverrideEnabled = enabled,
-            sound = if (!enabled) null else _draft.value.sound,
-            volume = if (!enabled) null else _draft.value.volume
-        )
+        if (enabled) {
+            val cat = categories.value.firstOrNull { it.id == _draft.value.categoryId }
+            _draft.value = _draft.value.copy(
+                soundOverrideEnabled = true,
+                sound = _draft.value.sound ?: cat?.sound,
+                volume = _draft.value.volume ?: cat?.volume,
+                continuous = _draft.value.continuous ?: cat?.continuous
+            )
+        } else {
+            _draft.value = _draft.value.copy(
+                soundOverrideEnabled = false,
+                sound = null,
+                volume = null,
+                continuous = null
+            )
+        }
     }
 
     fun save(onComplete: (Int) -> Unit) {
@@ -97,6 +110,7 @@ class ReminderSheetViewModel @Inject constructor(
                 categoryId = d.categoryId!!,
                 sound = if (d.soundOverrideEnabled) d.sound else null,
                 volume = if (d.soundOverrideEnabled) d.volume else null,
+                continuous = if (d.soundOverrideEnabled) d.continuous else null,
                 notes = d.notes?.takeIf { it.isNotBlank() }
             )
             val savedId = reminderRepo.save(reminder)

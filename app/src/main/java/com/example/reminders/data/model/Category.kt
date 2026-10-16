@@ -11,7 +11,8 @@ data class Category(
     val name: String,
     val color: String,      // palette token e.g. "accent-500"
     val sound: String,      // soundId
-    val volume: Int         // 0–100
+    val volume: Int,        // 0–100
+    val continuous: Boolean = false
 )
 
 // All 6 available sounds

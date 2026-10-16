@@ -20,6 +20,7 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 8. When dismissing a weekly reminder it keeps it as up next, which is wrong, as next time it should fire only next week. 
 7. The app allows to set an alarm for a past date/time. Should prevent. To make it wasy, the default time will be the upcoming שעה עגולה
 6. The days of week presented for recurring reminder should start from right to left
+a. צלצול רציף
 
 
 ## ✔️Manually verified

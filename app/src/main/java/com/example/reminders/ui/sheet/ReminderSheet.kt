@@ -209,7 +209,8 @@ fun ReminderSheet(
                     categories = categories,
                     onToggle = { vm.setSoundOverride(it) },
                     onSoundPickerOpen = { showSoundPicker = true },
-                    onVolumeChange = { vm.updateVolume(it) }
+                    onVolumeChange = { vm.updateVolume(it) },
+                    onContinuousChange = { vm.updateContinuous(it) }
                 )
             }
 
@@ -361,7 +362,8 @@ private fun SoundOverrideCard(
     categories: List<Category>,
     onToggle: (Boolean) -> Unit,
     onSoundPickerOpen: () -> Unit,
-    onVolumeChange: (Int) -> Unit
+    onVolumeChange: (Int) -> Unit,
+    onContinuousChange: (Boolean) -> Unit
 ) {
     val cat = categories.firstOrNull { it.id == draft.categoryId }
     Column(
@@ -383,9 +385,10 @@ private fun SoundOverrideCard(
                     modifier = Modifier.size(20.dp), tint = Neutral700)
                 Column {
                     Text("צליל ועוצמה", style = AppTypography.titleSmall, color = TextColor)
-                    val subtitle = if (!draft.soundOverrideEnabled && cat != null)
-                        "לפי ${cat.name}: ${cat.sound} · ${cat.volume}%"
-                    else "מותאם לתזכורת זו"
+                    val subtitle = if (!draft.soundOverrideEnabled && cat != null) {
+                        val continuousSuffix = if (cat.continuous) " · רציף" else ""
+                        "לפי ${cat.name}: ${cat.sound} · ${cat.volume}%$continuousSuffix"
+                    } else "מותאם לתזכורת זו"
                     Text(subtitle, style = AppTypography.labelMedium, color = Neutral700)
                 }
             }
@@ -405,8 +408,8 @@ private fun SoundOverrideCard(
 
         if (draft.soundOverrideEnabled) {
             val dEff = if (cat != null)
-                Pair(draft.sound ?: cat.sound, draft.volume ?: cat.volume)
-            else Pair(draft.sound ?: "chime", draft.volume ?: 70)
+                Triple(draft.sound ?: cat.sound, draft.volume ?: cat.volume, draft.continuous ?: cat.continuous)
+            else Triple(draft.sound ?: "chime", draft.volume ?: 70, draft.continuous ?: false)
 
             Row(
                 modifier = Modifier
@@ -435,6 +438,30 @@ private fun SoundOverrideCard(
                     onValueChange = { onVolumeChange(it.toInt()) },
                     valueRange = 0f..100f,
                     colors = SliderDefaults.colors(thumbColor = AccentMain, activeTrackColor = AccentMain)
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(PillShape)
+                    .background(Bg)
+                    .padding(horizontal = 16.dp, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Outlined.Repeat, contentDescription = null,
+                        modifier = Modifier.size(18.dp), tint = Neutral600)
+                    Text("צלצול רציף", style = AppTypography.bodyMedium, color = Neutral700)
+                }
+                Switch(
+                    checked = dEff.third,
+                    onCheckedChange = { onContinuousChange(it) },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Bg, checkedTrackColor = AccentMain,
+                        uncheckedThumbColor = Bg, uncheckedTrackColor = Neutral400
+                    )
                 )
             }
         }

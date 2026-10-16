@@ -160,6 +160,30 @@ fun CategorySheet(
                     )
                 }
 
+                // Continuous ring toggle
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(PillShape)
+                        .background(Surface)
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Outlined.Repeat, contentDescription = null, modifier = Modifier.size(18.dp), tint = Neutral600)
+                        Text("צלצול רציף", style = AppTypography.bodyMedium, color = TextColor)
+                    }
+                    Switch(
+                        checked = draft.continuous,
+                        onCheckedChange = { vm.updateContinuous(it) },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Bg, checkedTrackColor = AccentMain,
+                            uncheckedThumbColor = Bg, uncheckedTrackColor = Neutral400
+                        )
+                    )
+                }
+
                 // Save button
                 Button(
                     onClick = { vm.save { onDismiss() } },

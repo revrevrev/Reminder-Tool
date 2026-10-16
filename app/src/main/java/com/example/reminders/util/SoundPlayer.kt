@@ -43,11 +43,11 @@ object SoundPlayer {
         }
     }
 
-    fun startAlarm(context: Context, soundId: String, volume: Int) {
+    fun startAlarm(context: Context, soundId: String, volume: Int, continuous: Boolean = true) {
         stop()
         val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         am.setStreamVolume(AudioManager.STREAM_ALARM, am.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0)
-        mediaPlayer = MediaPlayer().apply {
+        val mp = MediaPlayer().apply {
             setAudioAttributes(
                 AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_ALARM)
@@ -56,10 +56,24 @@ object SoundPlayer {
             )
             setDataSource(context.resources.openRawResourceFd(soundResId(soundId)))
             setVolume(volume / 100f, volume / 100f)
-            isLooping = true
+            isLooping = continuous
             prepare()
             start()
         }
+        if (!continuous) {
+            val plays = intArrayOf(1)
+            mp.setOnCompletionListener { player ->
+                if (plays[0] < 3 && mediaPlayer != null) {
+                    plays[0]++
+                    player.seekTo(0)
+                    player.start()
+                } else {
+                    mediaPlayer = null
+                    player.release()
+                }
+            }
+        }
+        mediaPlayer = mp
     }
 
     fun stop() {
