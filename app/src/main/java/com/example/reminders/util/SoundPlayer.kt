@@ -8,7 +8,6 @@ import com.example.reminders.R
 
 object SoundPlayer {
     private var mediaPlayer: MediaPlayer? = null
-    private var currentPreviewSoundId: String? = null
 
     internal var playerFactory: () -> MediaPlayer = { MediaPlayer() }
 
@@ -23,12 +22,7 @@ object SoundPlayer {
     }
 
     fun preview(context: Context, soundId: String, volume: Int) {
-        if (mediaPlayer != null && currentPreviewSoundId == soundId) {
-            stop()
-            return
-        }
         stop()
-        currentPreviewSoundId = soundId
         val mp = playerFactory()
         try {
             mp.setAudioAttributes(
@@ -42,10 +36,9 @@ object SoundPlayer {
             mp.isLooping = false
             mp.prepare()
             mp.start()
-            mp.setOnCompletionListener { currentPreviewSoundId = null; mediaPlayer = null; it.release() }
+            mp.setOnCompletionListener { mediaPlayer = null; it.release() }
             mediaPlayer = mp
         } catch (e: Exception) {
-            currentPreviewSoundId = null
             mp.runCatching { release() }
         }
     }
@@ -84,7 +77,6 @@ object SoundPlayer {
     }
 
     fun stop() {
-        currentPreviewSoundId = null
         val mp = mediaPlayer
         mediaPlayer = null
         mp?.runCatching { stop(); release() }

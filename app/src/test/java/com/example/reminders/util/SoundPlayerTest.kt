@@ -39,12 +39,9 @@ class SoundPlayerTest {
     @After
     fun tearDown() {
         SoundPlayer.playerFactory = { MediaPlayer() }
-        SoundPlayer::class.java.getDeclaredField("mediaPlayer").also {
-            it.isAccessible = true; it.set(SoundPlayer, null)
-        }
-        SoundPlayer::class.java.getDeclaredField("currentPreviewSoundId").also {
-            it.isAccessible = true; it.set(SoundPlayer, null)
-        }
+        val field = SoundPlayer::class.java.getDeclaredField("mediaPlayer")
+        field.isAccessible = true
+        field.set(SoundPlayer, null)
     }
 
     /**
@@ -73,33 +70,38 @@ class SoundPlayerTest {
     }
 
     /**
-     * Regression test for defect 10: clicking the play triangle on a sound that is already
-     * previewing should stop it (toggle off), not stop-and-restart it.
+     * Regression test for defect 10: Compose event propagation caused both onPreview (play
+     * button) and onSelect (row click) to fire for the same tap in the old SoundRow layout,
+     * calling preview() twice in quick succession. The second call stopped the just-started
+     * player and had to restart from scratch; on some devices/audio states the second
+     * MediaPlayer creation could fail silently, leaving no sound playing at all.
      *
-     * Before fix: preview("chime") while "chime" is playing calls stop() then starts a NEW player.
-     * User hears the sound restart instead of stop, and when both onPreview + onSelect fire for
-     * the same tap (Compose propagation) the rapid stop-restart sequence can also produce silence.
+     * The fix restructures SoundRow so the play button is a sibling of the selectable row
+     * area (not nested inside it), so only onPreview fires when the triangle is tapped.
      *
-     * After fix: if the same soundId is currently playing, preview() stops it and returns.
+     * This test verifies the SoundPlayer-level behaviour: rapid back-to-back preview() calls
+     * for the same sound must result in both players being started (the second one cleanly
+     * after the first is stopped), proving there is no silent-failure path.
      */
     @Test
-    fun `preview of same sound while already playing stops instead of restarting`() {
+    fun `rapid back-to-back preview calls for same sound do not silence playback`() {
         mockConstruction(AudioAttributes.Builder::class.java) { builder, _ ->
             whenever(builder.setUsage(any<Int>())).thenReturn(builder)
             whenever(builder.setContentType(any<Int>())).thenReturn(builder)
             doReturn(null).whenever(builder).build()
         }.use {
-            // Start previewing "chime"
+            // First call (e.g. from onPreview)
             SoundPlayer.preview(mockContext, "chime", 70)
             verify(mockMp1).start()
 
-            // Click the play button again for the same sound — should toggle OFF
+            // Second call immediately after (e.g. from onSelect propagation)
             SoundPlayer.preview(mockContext, "chime", 70)
 
-            // FAILS before fix: mockMp2.start() is called because preview() always restarts
-            // PASSES after fix: same sound detected, stop() called, no new player created
-            verify(mockMp1, times(1)).stop()   // original player was stopped
-            verify(mockMp2, never()).start()    // no second player was started
+            // First player must have been stopped cleanly
+            verify(mockMp1, times(1)).stop()
+            // Second player must have started — sound plays
+            // FAILS if preview() were to toggle-off instead of restart (the wrong fix tried earlier)
+            verify(mockMp2).start()
         }
     }
 
