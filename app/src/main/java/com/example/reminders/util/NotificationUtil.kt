@@ -5,9 +5,14 @@ import android.app.NotificationManager
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.RingtoneManager
+import com.example.reminders.data.model.Category
+import com.example.reminders.data.model.Reminder
 
 object NotificationUtil {
     const val CHANNEL_ALARM = "reminders_alarm"
+
+    fun buildNotificationContent(reminder: Reminder, category: Category): Pair<String, String> =
+        Pair(reminder.name, category.name)
 
     fun createChannels(context: Context) {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

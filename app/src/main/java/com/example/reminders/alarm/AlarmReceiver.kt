@@ -7,9 +7,20 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.example.reminders.AlarmActivity
+import com.example.reminders.data.repository.CategoryRepository
+import com.example.reminders.data.repository.ReminderRepository
 import com.example.reminders.util.NotificationUtil
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AlarmReceiver : BroadcastReceiver() {
+
+    @Inject lateinit var reminderRepo: ReminderRepository
+    @Inject lateinit var categoryRepo: CategoryRepository
 
     companion object {
         const val EXTRA_REMINDER_ID = "reminder_id"
@@ -29,19 +40,34 @@ class AlarmReceiver : BroadcastReceiver() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val notification = Notification.Builder(context, NotificationUtil.CHANNEL_ALARM)
-            .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
-            .setContentTitle("תזכורת")
-            .setContentText("יש לך תזכורת")
-            .setFullScreenIntent(fullScreenPi, true)
-            .setCategory(Notification.CATEGORY_ALARM)
-            .setVisibility(Notification.VISIBILITY_PUBLIC)
-            .setAutoCancel(true)
-            .build()
+        val pendingResult = goAsync()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val reminder = reminderRepo.getById(reminderId)
+                val category = reminder?.let { categoryRepo.getById(it.categoryId) }
 
-        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.notify(reminderId, notification)
+                val (title, body) = if (reminder != null && category != null)
+                    NotificationUtil.buildNotificationContent(reminder, category)
+                else
+                    Pair("תזכורת", "יש לך תזכורת")
 
-        context.startActivity(alarmIntent)
+                val notification = Notification.Builder(context, NotificationUtil.CHANNEL_ALARM)
+                    .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
+                    .setContentTitle(title)
+                    .setContentText(body)
+                    .setFullScreenIntent(fullScreenPi, true)
+                    .setCategory(Notification.CATEGORY_ALARM)
+                    .setVisibility(Notification.VISIBILITY_PUBLIC)
+                    .setAutoCancel(true)
+                    .build()
+
+                val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                nm.notify(reminderId, notification)
+
+                context.startActivity(alarmIntent)
+            } finally {
+                pendingResult.finish()
+            }
+        }
     }
 }

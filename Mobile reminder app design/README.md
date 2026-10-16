@@ -151,6 +151,13 @@ Persist reminders, categories and settings locally (Room/DataStore). Schedule ex
 
 **Seed categories:** משפחה (accent-500, chime, 70) · בית (accent-2-500, birds, 60) · בריאות (accent-300, marimba, 50) · כספים (neutral-600, bell, 80).
 
+## Notifications
+When an alarm fires as an OS notification (e.g. when the full-screen intent is not shown):
+- **Title:** the reminder's name.
+- **Body:** the reminder's category name.
+
+(Previously hardcoded to "תזכורת" / "יש לך תזכורת".)
+
 ## Category tone (derived colors on category-colored surfaces)
 Given a palette color `{family}-{step}`:
 - `light` = step ≤ 400
