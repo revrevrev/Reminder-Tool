@@ -22,6 +22,15 @@ object NotificationUtil {
     fun buildNotificationContent(reminder: Reminder, category: Category): Pair<String, String> =
         Pair(reminder.name, category.name)
 
+    fun resolveAlarmSound(reminder: Reminder?, category: Category?): String =
+        reminder?.sound ?: category?.sound ?: "chime"
+
+    fun resolveAlarmVolume(reminder: Reminder?, category: Category?): Int =
+        reminder?.volume ?: category?.volume ?: 70
+
+    fun resolveAlarmContinuous(reminder: Reminder?, category: Category?): Boolean =
+        reminder?.continuous ?: category?.continuous ?: false
+
     fun createChannels(context: Context) {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val audioAttr = AudioAttributes.Builder()
