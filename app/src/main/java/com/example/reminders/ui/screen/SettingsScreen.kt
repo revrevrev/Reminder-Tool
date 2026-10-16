@@ -21,7 +21,7 @@ import com.example.reminders.ui.theme.*
 import com.example.reminders.util.paletteColor
 import com.example.reminders.viewmodel.SettingsViewModel
 
-private val SNOOZE_OPTIONS = listOf(5, 10, 15, 30)
+private val SNOOZE_OPTIONS = listOf(1, 5, 10, 15, 30)
 
 @Composable
 fun SettingsScreen(
