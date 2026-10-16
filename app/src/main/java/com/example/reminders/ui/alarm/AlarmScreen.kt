@@ -120,7 +120,7 @@ fun AlarmScreen(
                     }
 
                     // Done button
-                    val doneLabel = if (reminder.type == ReminderType.ONCE) "בוצע · לארכיון" else "בוצע"
+                    val doneLabel = if (reminder.type == ReminderType.ONCE) "בוצע" else "בוצע"
                     Button(
                         onClick = { vm.markDone(onDone) },
                         modifier = Modifier.weight(1.6f),

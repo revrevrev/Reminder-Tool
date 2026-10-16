@@ -568,7 +568,7 @@ class Component extends DCLogic {
       defaultCatSub:s.cats.some(c=>c.id===s.defaultCat)?'נבחרת מראש בכל תזכורת חדשה':'בכל תזכורת חדשה תתבקשו לבחור קטגוריה',
       defaultCatOpts:[{key:'none',label:'ללא',hasDot:false,color:'',id:null},...s.cats.map(c=>({key:c.id,label:c.name,hasDot:true,color:c.color,id:c.id}))].map(x=>{const on=(s.cats.some(c=>c.id===s.defaultCat)?s.defaultCat:null)===x.id;return {...x,ring:on?'inset 0 0 0 2px var(--color-text)':'none',onClick:()=>this.setState({defaultCat:x.id})};}),
       alarmOpen:!!ar,
-      alarm:ar?{name:ar.name,time:hm(arAt),dateLabel:longDate(arAt),notes:ar.notes,hasNotes:!!ar.notes,doneLabel:ar.type==='once'?'בוצע · לארכיון':'בוצע',bg:at.bg,fg:at.fg,c1:at.c1,c2:at.c2,icon:at.icon}:{},
+      alarm:ar?{name:ar.name,time:hm(arAt),dateLabel:longDate(arAt),notes:ar.notes,hasNotes:!!ar.notes,doneLabel:ar.type==='once'?'בוצע':'בוצע',bg:at.bg,fg:at.fg,c1:at.c1,c2:at.c2,icon:at.icon}:{},
       snoozeMins:s.snoozeMins,
       snoozeOpts:[5,10,15,30].map(m=>{const c=chip(s.snoozeMins===m);return {label:`${m}`,bg:c.bg,fg:c.fg,onClick:()=>this.setState({snoozeMins:m})};}),
       incSnooze:()=>this.setState(st=>({snoozeMins:Math.min(120,st.snoozeMins+1)})),decSnooze:()=>this.setState(st=>({snoozeMins:Math.max(1,st.snoozeMins-1)})),

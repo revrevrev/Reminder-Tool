@@ -97,7 +97,7 @@ Shown via full-screen intent / lock-screen activity.
 - Bottom panel (margin 12, bottom 28, bg `#f5ead8`, radius 32, padding 18/18/16, gap 12):
   - "נודניק" label + stepper (− value +), value "NN דק׳" heading 18px, 1–120 min, ±1.
   - Presets row 5 / 10 / 15 / 30 (selected `accent` fill / bg text; else surface). Initial value = Settings default snooze.
-  - Buttons: **נודניק** secondary (flex 1) and **בוצע** primary (flex 1.6) — label "בוצע · לארכיון" for one-offs.
+  - Buttons: **נודניק** secondary (flex 1) and **בוצע** primary (flex 1.6) — label "בוצע" for one-offs.
 - Sound loops (every ~2.6 s in prototype) until an action is taken.
 
 ### 6. Categories (קטגוריות)

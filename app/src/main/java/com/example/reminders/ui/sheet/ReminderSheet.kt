@@ -197,11 +197,22 @@ fun ReminderSheet(
             )
 
             if (draft.type == ReminderType.ONCE && DateTimeUtil.isInPast(draft.date, draft.time)) {
-                Text(
-                    text = "לא ניתן לשמור תזכורת לזמן שעבר",
-                    style = AppTypography.labelMedium,
-                    color = MaterialTheme.colorScheme.error
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Icon(
+                        Icons.Outlined.Warning,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                    Text(
+                        text = "לא ניתן לשמור תזכורת לזמן שעבר",
+                        style = AppTypography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
             }
 
             // 6. Summary — plain text (no pill background)

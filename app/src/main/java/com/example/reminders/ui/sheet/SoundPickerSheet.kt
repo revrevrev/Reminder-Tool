@@ -56,7 +56,7 @@ fun SoundPickerSheet(
                     onSoundSelected(selected)
                     onDismiss()
                 }) {
-                    Text("סיום", style = AppTypography.labelLarge, color = AccentMain)
+                    Text("בחר", style = AppTypography.labelLarge, color = AccentMain)
                 }
             }
 
