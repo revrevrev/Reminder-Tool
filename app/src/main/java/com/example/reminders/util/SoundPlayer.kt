@@ -47,18 +47,22 @@ object SoundPlayer {
         stop()
         val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         am.setStreamVolume(AudioManager.STREAM_ALARM, am.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0)
-        val mp = MediaPlayer().apply {
-            setAudioAttributes(
+        val mp = playerFactory()
+        try {
+            mp.setAudioAttributes(
                 AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_ALARM)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .build()
             )
-            setDataSource(context.resources.openRawResourceFd(soundResId(soundId)))
-            setVolume(volume / 100f, volume / 100f)
-            isLooping = continuous
-            prepare()
-            start()
+            mp.setDataSource(context.resources.openRawResourceFd(soundResId(soundId)))
+            mp.setVolume(volume / 100f, volume / 100f)
+            mp.isLooping = continuous
+            mp.prepare()
+            mp.start()
+        } catch (e: Exception) {
+            mp.runCatching { release() }
+            return
         }
         if (!continuous) {
             val plays = intArrayOf(1)

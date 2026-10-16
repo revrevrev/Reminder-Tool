@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.AssetFileDescriptor
 import android.content.res.Resources
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.MediaPlayer
 import org.junit.After
 import org.junit.Before
@@ -30,7 +31,9 @@ class SoundPlayerTest {
         mockAfd = mock()
         callCount = 0
 
+        val mockAm: AudioManager = mock()
         whenever(mockContext.resources).thenReturn(mockResources)
+        whenever(mockContext.getSystemService(Context.AUDIO_SERVICE)).thenReturn(mockAm)
         whenever(mockResources.openRawResourceFd(any<Int>())).thenReturn(mockAfd)
 
         SoundPlayer.playerFactory = { if (callCount++ == 0) mockMp1 else mockMp2 }
@@ -140,6 +143,33 @@ class SoundPlayerTest {
             // FAILS with bug  (stop() calls release() on still-referenced completed player)
             // PASSES with fix (completion listener nulled mediaPlayer → stop() is a no-op)
             verify(mockMp1, times(1)).release()
+        }
+    }
+
+    /**
+     * Regression test for defect 12: SoundPlayer.startAlarm() had no error handling around
+     * MediaPlayer.prepare(). An IOException (e.g. from an invalid/placeholder audio file)
+     * propagated uncaught to AlarmActivity.onCreate(), crashing the app and dismissing the
+     * alarm screen immediately before any sound played ("sound stops and it is dismissed
+     * immediately").
+     *
+     * Fix: wrap MediaPlayer setup in startAlarm with try/catch — same as preview() already does.
+     */
+    @Test
+    fun `startAlarm does not crash when prepare throws IOException`() {
+        mockConstruction(AudioAttributes.Builder::class.java) { builder, _ ->
+            whenever(builder.setUsage(any<Int>())).thenReturn(builder)
+            whenever(builder.setContentType(any<Int>())).thenReturn(builder)
+            doReturn(null).whenever(builder).build()
+        }.use {
+            doThrow(IOException("bad audio")).whenever(mockMp1).prepare()
+
+            // Must NOT propagate — AlarmActivity must not crash on invalid audio
+            SoundPlayer.startAlarm(mockContext, "chime", 70, false)
+
+            // Player must be released and not left dangling
+            verify(mockMp1).release()
+            verify(mockMp1, never()).start()
         }
     }
 }

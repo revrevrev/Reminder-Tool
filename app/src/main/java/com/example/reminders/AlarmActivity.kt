@@ -1,5 +1,6 @@
 package com.example.reminders
 
+import android.app.NotificationManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,12 +17,13 @@ import dagger.hilt.android.AndroidEntryPoint
 class AlarmActivity : ComponentActivity() {
 
     private val vm: AlarmViewModel by viewModels()
+    private var reminderId = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        val reminderId = intent.getIntExtra(AlarmReceiver.EXTRA_REMINDER_ID, -1)
+        reminderId = intent.getIntExtra(AlarmReceiver.EXTRA_REMINDER_ID, -1)
         if (reminderId == -1) { finish(); return }
 
         vm.loadReminder(reminderId)
@@ -38,10 +40,12 @@ class AlarmActivity : ComponentActivity() {
                     vm = vm,
                     onSnooze = {
                         SoundPlayer.stop()
+                        cancelNotification()
                         finish()
                     },
                     onDone = {
                         SoundPlayer.stop()
+                        cancelNotification()
                         finish()
                     }
                 )
@@ -52,5 +56,11 @@ class AlarmActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         SoundPlayer.stop()
+    }
+
+    private fun cancelNotification() {
+        if (reminderId != -1) {
+            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(reminderId)
+        }
     }
 }
