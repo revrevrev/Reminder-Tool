@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Icon
 import com.example.reminders.AlarmActivity
 import com.example.reminders.data.repository.CategoryRepository
 import com.example.reminders.data.repository.ReminderRepository
@@ -40,6 +41,15 @@ class AlarmReceiver : BroadcastReceiver() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        val markCompletePi = PendingIntent.getBroadcast(
+            context,
+            reminderId + 10000,
+            Intent(NotificationUtil.ACTION_MARK_COMPLETE, null, context, MarkCompleteReceiver::class.java).apply {
+                putExtra(EXTRA_REMINDER_ID, reminderId)
+            },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
         val pendingResult = goAsync()
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -51,6 +61,12 @@ class AlarmReceiver : BroadcastReceiver() {
                 else
                     Pair("תזכורת", "יש לך תזכורת")
 
+                val markDoneAction = Notification.Action.Builder(
+                    Icon.createWithResource(context, android.R.drawable.checkbox_on_background),
+                    "סיום",
+                    markCompletePi
+                ).build()
+
                 val notification = Notification.Builder(context, NotificationUtil.CHANNEL_ALARM)
                     .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
                     .setContentTitle(title)
@@ -59,6 +75,7 @@ class AlarmReceiver : BroadcastReceiver() {
                     .setCategory(Notification.CATEGORY_ALARM)
                     .setVisibility(Notification.VISIBILITY_PUBLIC)
                     .setAutoCancel(true)
+                    .addAction(markDoneAction)
                     .build()
 
                 val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
