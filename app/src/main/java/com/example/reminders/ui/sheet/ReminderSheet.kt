@@ -196,6 +196,14 @@ fun ReminderSheet(
                 onTimeChange = { vm.updateTime(it) }
             )
 
+            if (draft.type == ReminderType.ONCE && DateTimeUtil.isInPast(draft.date, draft.time)) {
+                Text(
+                    text = "לא ניתן לשמור תזכורת לזמן שעבר",
+                    style = AppTypography.labelMedium,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+
             // 6. Summary — plain text (no pill background)
             val summary = DateTimeUtil.summaryPill(draft.type, draft.date, draft.day, draft.time)
             if (summary.isNotEmpty()) {
