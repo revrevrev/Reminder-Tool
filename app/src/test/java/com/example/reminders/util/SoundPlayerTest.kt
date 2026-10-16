@@ -39,9 +39,12 @@ class SoundPlayerTest {
     @After
     fun tearDown() {
         SoundPlayer.playerFactory = { MediaPlayer() }
-        val field = SoundPlayer::class.java.getDeclaredField("mediaPlayer")
-        field.isAccessible = true
-        field.set(SoundPlayer, null)
+        SoundPlayer::class.java.getDeclaredField("mediaPlayer").also {
+            it.isAccessible = true; it.set(SoundPlayer, null)
+        }
+        SoundPlayer::class.java.getDeclaredField("currentPreviewSoundId").also {
+            it.isAccessible = true; it.set(SoundPlayer, null)
+        }
     }
 
     /**
@@ -66,6 +69,37 @@ class SoundPlayerTest {
             verify(mockMp1).release()
             // start() must NOT have been called on a player that never prepared
             verify(mockMp1, never()).start()
+        }
+    }
+
+    /**
+     * Regression test for defect 10: clicking the play triangle on a sound that is already
+     * previewing should stop it (toggle off), not stop-and-restart it.
+     *
+     * Before fix: preview("chime") while "chime" is playing calls stop() then starts a NEW player.
+     * User hears the sound restart instead of stop, and when both onPreview + onSelect fire for
+     * the same tap (Compose propagation) the rapid stop-restart sequence can also produce silence.
+     *
+     * After fix: if the same soundId is currently playing, preview() stops it and returns.
+     */
+    @Test
+    fun `preview of same sound while already playing stops instead of restarting`() {
+        mockConstruction(AudioAttributes.Builder::class.java) { builder, _ ->
+            whenever(builder.setUsage(any<Int>())).thenReturn(builder)
+            whenever(builder.setContentType(any<Int>())).thenReturn(builder)
+            doReturn(null).whenever(builder).build()
+        }.use {
+            // Start previewing "chime"
+            SoundPlayer.preview(mockContext, "chime", 70)
+            verify(mockMp1).start()
+
+            // Click the play button again for the same sound — should toggle OFF
+            SoundPlayer.preview(mockContext, "chime", 70)
+
+            // FAILS before fix: mockMp2.start() is called because preview() always restarts
+            // PASSES after fix: same sound detected, stop() called, no new player created
+            verify(mockMp1, times(1)).stop()   // original player was stopped
+            verify(mockMp2, never()).start()    // no second player was started
         }
     }
 

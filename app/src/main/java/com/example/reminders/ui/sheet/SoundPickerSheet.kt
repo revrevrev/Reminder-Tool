@@ -66,7 +66,6 @@ fun SoundPickerSheet(
                         sound = sound,
                         selected = selected == sound.id,
                         isDefault = categoryDefaultSound == sound.id,
-                        volume = previewVolume,
                         onSelect = {
                             selected = sound.id
                             SoundPlayer.preview(context, sound.id, previewVolume)
@@ -86,58 +85,68 @@ private fun SoundRow(
     sound: Sound,
     selected: Boolean,
     isDefault: Boolean,
-    volume: Int,
     onSelect: () -> Unit,
     onPreview: () -> Unit
 ) {
+    // Outer row: not clickable — separates the selectable area from the play button so
+    // tapping the play button does not also fire onSelect (Compose propagates taps to all
+    // overlapping clickable regions, so the button must live outside the clickable area).
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(22.dp))
             .background(if (selected) Accent100 else Bg)
-            .clickable(onClick = onSelect)
             .padding(horizontal = 12.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        // Radio dot
-        Box(
+        // Selectable area (radio + name) — takes up all space except the play button
+        Row(
             modifier = Modifier
-                .size(20.dp)
-                .clip(CircleShape)
-                .background(if (selected) Bg else Bg)
-                .border(2.dp, if (selected) AccentMain else Neutral400, CircleShape),
-            contentAlignment = Alignment.Center
+                .weight(1f)
+                .clickable(onClick = onSelect),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            if (selected) {
-                Box(
-                    modifier = Modifier
-                        .size(10.dp)
-                        .clip(CircleShape)
-                        .background(AccentMain)
-                )
-            }
-        }
-
-        // Name + description + tag
-        Column(modifier = Modifier.weight(1f)) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                Text(sound.name, style = AppTypography.titleSmall, color = TextColor)
-                if (isDefault) {
+            // Radio dot
+            Box(
+                modifier = Modifier
+                    .size(20.dp)
+                    .clip(CircleShape)
+                    .background(Bg)
+                    .border(2.dp, if (selected) AccentMain else Neutral400, CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                if (selected) {
                     Box(
                         modifier = Modifier
-                            .clip(PillShape)
-                            .background(Accent200)
-                            .padding(horizontal = 8.dp, vertical = 2.dp)
-                    ) {
-                        Text("ברירת מחדל", style = AppTypography.labelSmall, color = Accent800)
-                    }
+                            .size(10.dp)
+                            .clip(CircleShape)
+                            .background(AccentMain)
+                    )
                 }
             }
-            Text(sound.description, style = AppTypography.labelMedium, color = Neutral700)
+
+            // Name + description + tag
+            Column {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text(sound.name, style = AppTypography.titleSmall, color = TextColor)
+                    if (isDefault) {
+                        Box(
+                            modifier = Modifier
+                                .clip(PillShape)
+                                .background(Accent200)
+                                .padding(horizontal = 8.dp, vertical = 2.dp)
+                        ) {
+                            Text("ברירת מחדל", style = AppTypography.labelSmall, color = Accent800)
+                        }
+                    }
+                }
+                Text(sound.description, style = AppTypography.labelMedium, color = Neutral700)
+            }
         }
 
-        // Play button
+        // Play button — sibling of the selectable area, not nested inside it
         IconButton(
             onClick = onPreview,
             modifier = Modifier
