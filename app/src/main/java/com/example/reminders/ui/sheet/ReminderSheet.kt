@@ -379,8 +379,11 @@ private fun SoundOverrideCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(
+                modifier = Modifier.weight(1f),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 Icon(Icons.Outlined.MusicNote, contentDescription = null,
                     modifier = Modifier.size(20.dp), tint = Neutral700)
                 Column {
@@ -389,7 +392,8 @@ private fun SoundOverrideCard(
                         val continuousSuffix = if (cat.continuous) " · רציף" else ""
                         "לפי ${cat.name}: ${cat.sound} · ${cat.volume}%$continuousSuffix"
                     } else "מותאם לתזכורת זו"
-                    Text(subtitle, style = AppTypography.labelMedium, color = Neutral700)
+                    Text(subtitle, style = AppTypography.labelMedium, color = Neutral700,
+                        maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically,

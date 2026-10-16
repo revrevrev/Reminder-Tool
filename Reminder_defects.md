@@ -13,7 +13,7 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## ##########################################
 
 ## Active
-10. When clicking the triangle next to a sound in the list for selection, it doesn't play the sound as you would expect.
+10. When clicking the triangle next to a sound in the list for selection (in category / reminder), it doesn't play the sound as you would expect.
 
 ## ❔Ready for Testing
 9. When opening a category for editing, I have to scroll it to see the full editing page
