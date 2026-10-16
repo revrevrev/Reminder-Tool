@@ -50,6 +50,15 @@ class AlarmReceiver : BroadcastReceiver() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        val snoozePi = PendingIntent.getBroadcast(
+            context,
+            reminderId + 20000,
+            Intent(NotificationUtil.ACTION_SNOOZE, null, context, SnoozeReceiver::class.java).apply {
+                putExtra(EXTRA_REMINDER_ID, reminderId)
+            },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
         val pendingResult = goAsync()
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -67,6 +76,12 @@ class AlarmReceiver : BroadcastReceiver() {
                     markCompletePi
                 ).build()
 
+                val snoozeAction = Notification.Action.Builder(
+                    Icon.createWithResource(context, android.R.drawable.ic_popup_reminder),
+                    "נודניק",
+                    snoozePi
+                ).build()
+
                 val notification = Notification.Builder(context, NotificationUtil.CHANNEL_ALARM)
                     .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
                     .setContentTitle(title)
@@ -75,6 +90,7 @@ class AlarmReceiver : BroadcastReceiver() {
                     .setCategory(Notification.CATEGORY_ALARM)
                     .setVisibility(Notification.VISIBILITY_PUBLIC)
                     .setAutoCancel(true)
+                    .addAction(snoozeAction)
                     .addAction(markDoneAction)
                     .build()
 

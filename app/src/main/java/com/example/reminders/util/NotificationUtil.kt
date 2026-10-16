@@ -11,8 +11,12 @@ import com.example.reminders.data.model.Reminder
 object NotificationUtil {
     const val CHANNEL_ALARM = "reminders_alarm"
     const val ACTION_MARK_COMPLETE = "com.example.reminders.ACTION_MARK_COMPLETE"
+    const val ACTION_SNOOZE = "com.example.reminders.ACTION_SNOOZE"
 
     fun markCompleteExtras(reminderId: Int): Map<String, Int> =
+        mapOf("reminder_id" to reminderId)
+
+    fun snoozeExtras(reminderId: Int): Map<String, Int> =
         mapOf("reminder_id" to reminderId)
 
     fun buildNotificationContent(reminder: Reminder, category: Category): Pair<String, String> =

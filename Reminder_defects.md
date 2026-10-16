@@ -13,10 +13,10 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## ##########################################
 
 ## Active
-11. The notification should offer also the snooze option. 
 12. In settings, Add 1 min to the possible snooze options.
 
 ## ❔Ready for Testing
+11. The notification should offer also the snooze option.
 10. When clicking the triangle next to a sound in the list for selection (in category / reminder), it doesn't play the sound as you would expect.
 8. When dismissing a weekly reminder it keeps it as up next, which is wrong, as next time it should fire only next week. 
 7. The app allows to set an alarm for a past date/time. Should prevent. To make it wasy, the default time will be the upcoming שעה עגולה
