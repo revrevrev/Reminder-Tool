@@ -7,6 +7,7 @@ import android.content.Intent
 import com.example.reminders.data.repository.ReminderRepository
 import com.example.reminders.data.repository.SettingsRepository
 import com.example.reminders.util.NotificationUtil
+import com.example.reminders.util.SoundPlayer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +34,7 @@ class SnoozeReceiver : BroadcastReceiver() {
                 val snoozeMinutes = settingsRepo.defaultSnoozeMinutes.first()
                 val updated = reminderRepo.snooze(reminder, snoozeMinutes)
                 alarmScheduler.schedule(updated)
+                SoundPlayer.stop()
                 val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 nm.cancel(reminderId)
             } catch (_: Exception) {

@@ -29,6 +29,15 @@ object NotificationUtil {
     fun resolveAlarmContinuous(reminder: Reminder?, category: Category?): Boolean =
         reminder?.continuous ?: category?.continuous ?: false
 
+    fun dispatchAlarmSound(context: Context, reminder: Reminder?, category: Category?) {
+        SoundPlayer.startAlarm(
+            context,
+            resolveAlarmSound(reminder, category),
+            resolveAlarmVolume(reminder, category),
+            resolveAlarmContinuous(reminder, category)
+        )
+    }
+
     fun createChannels(context: Context) {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channel = NotificationChannel(

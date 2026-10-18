@@ -13,15 +13,17 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## ##########################################
 
 ## Active
+17. For recurring reminders when I press snooze it doesn't really snooze when the time comes
 
 ## ❔Ready for Testing
-14. When an alarm is fired, I hear two sounds together.
+16. When the screen is not locked there is no sound when the notification pops it only shows as popup but no sound
 15. Too many crashes. Need to analyze
-13. When changing the default sound for a category it doesn't affect any existing/new reminder from that category
-e. When restoring a reminder - open it for editing
 
 
 ## ✔️Manually verified
+14. When an alarm is fired, I hear two sounds together.
+13. When changing the default sound for a category it doesn't affect any existing/new reminder from that category
+e. When restoring a reminder - open it for editing
 7. The app allows to set an alarm for a past date/time. Should prevent and show a clear message
 8. When dismissing a weekly reminder it keeps it as up next, which is wrong, as next time it should fire only next week. 
 11. The notification should offer also the snooze option.

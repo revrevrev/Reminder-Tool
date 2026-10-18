@@ -6,16 +6,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.lifecycleScope
 import com.example.reminders.alarm.AlarmReceiver
 import com.example.reminders.ui.alarm.AlarmScreen
 import com.example.reminders.ui.theme.RemindersTheme
-import com.example.reminders.util.NotificationUtil
 import com.example.reminders.util.SoundPlayer
 import com.example.reminders.viewmodel.AlarmViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AlarmActivity : ComponentActivity() {
@@ -31,19 +27,6 @@ class AlarmActivity : ComponentActivity() {
         if (reminderId == -1) { finish(); return }
 
         vm.loadReminder(reminderId)
-
-        // Start alarm sound only after the ViewModel state has loaded from the DB.
-        // Without this, effectiveSound() would always return "chime" because it reads from
-        // the StateFlow which is still empty when called synchronously after loadReminder().
-        lifecycleScope.launch {
-            val state = vm.uiState.first { it.reminder != null }
-            SoundPlayer.startAlarm(
-                this@AlarmActivity,
-                NotificationUtil.resolveAlarmSound(state.reminder, state.category),
-                NotificationUtil.resolveAlarmVolume(state.reminder, state.category),
-                NotificationUtil.resolveAlarmContinuous(state.reminder, state.category)
-            )
-        }
 
         setContent {
             RemindersTheme {

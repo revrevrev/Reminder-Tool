@@ -7,6 +7,7 @@ import android.content.Intent
 import com.example.reminders.data.model.ReminderType
 import com.example.reminders.data.repository.ReminderRepository
 import com.example.reminders.util.NotificationUtil
+import com.example.reminders.util.SoundPlayer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +34,7 @@ class MarkCompleteReceiver : BroadcastReceiver() {
                 if (reminder.type == ReminderType.WEEKLY) {
                     alarmScheduler.schedule(updated)
                 }
+                SoundPlayer.stop()
                 val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 nm.cancel(reminderId)
             } catch (_: Exception) {
