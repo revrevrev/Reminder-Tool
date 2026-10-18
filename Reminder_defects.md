@@ -15,11 +15,12 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## Active
 
 ## ❔Ready for Testing
+14. When an alarm is fired, I hear two sounds together.
 13. When changing the default sound for a category it doesn't affect any existing/new reminder from that category
-7. The app allows to set an alarm for a past date/time. Should prevent and show a clear message
 
 
 ## ✔️Manually verified
+7. The app allows to set an alarm for a past date/time. Should prevent and show a clear message
 8. When dismissing a weekly reminder it keeps it as up next, which is wrong, as next time it should fire only next week. 
 11. The notification should offer also the snooze option.
 12. When touching the notification, the sounds stops and it is dismissed immediately.

@@ -3,8 +3,6 @@ package com.example.reminders.util
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.media.AudioAttributes
-import android.media.RingtoneManager
 import com.example.reminders.data.model.Category
 import com.example.reminders.data.model.Reminder
 
@@ -33,16 +31,17 @@ object NotificationUtil {
 
     fun createChannels(context: Context) {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val audioAttr = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_ALARM)
-            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-            .build()
-        val alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+        // If the channel was previously created with a sound, delete it so the new channel
+        // (without sound) takes effect. Android ignores sound changes on existing channels.
+        if (nm.getNotificationChannel(CHANNEL_ALARM)?.sound != null) {
+            nm.deleteNotificationChannel(CHANNEL_ALARM)
+        }
         val channel = NotificationChannel(
             CHANNEL_ALARM, "תזכורות", NotificationManager.IMPORTANCE_HIGH
         ).apply {
             description = "התראות תזכורות"
-            setSound(alarmUri, audioAttr)
+            // No channel sound — AlarmActivity plays sound exclusively via SoundPlayer.
+            setSound(null, null)
             enableVibration(true)
             lockscreenVisibility = android.app.Notification.VISIBILITY_PUBLIC
         }
