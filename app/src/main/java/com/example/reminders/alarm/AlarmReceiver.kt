@@ -99,6 +99,8 @@ class AlarmReceiver : BroadcastReceiver() {
                 nm.notify(reminderId, notification)
 
                 context.startActivity(alarmIntent)
+            } catch (_: Exception) {
+                // Swallow — pendingResult.finish() must still run below
             } finally {
                 pendingResult.finish()
             }

@@ -18,7 +18,7 @@ object DateTimeUtil {
         val now = System.currentTimeMillis()
         return when (reminder.type) {
             ReminderType.ONCE -> {
-                val dt = parseDateTimeMs(reminder.date!!, reminder.time)
+                val dt = parseDateTimeMs(reminder.date ?: return Long.MAX_VALUE, reminder.time)
                 dt
             }
             ReminderType.WEEKLY -> nextWeeklyOccurrenceMs(reminder, after = now)
@@ -29,7 +29,7 @@ object DateTimeUtil {
     // Uses the occurrence NEAREST to nowMs so that marking done before the alarm fires still
     // skips this week's occurrence, not last week's.
     fun currentOccurrenceMs(reminder: Reminder, nowMs: Long = System.currentTimeMillis()): Long {
-        if (reminder.type == ReminderType.ONCE) return parseDateTimeMs(reminder.date!!, reminder.time)
+        if (reminder.type == ReminderType.ONCE) return parseDateTimeMs(reminder.date ?: return 0L, reminder.time)
         return nearestWeeklyOccurrenceMs(reminder, nowMs)
     }
 

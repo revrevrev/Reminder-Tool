@@ -13,9 +13,9 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## ##########################################
 
 ## Active
-15. Too many crushes. Need to analyze
 
 ## ❔Ready for Testing
+15. Too many crashes. Need to analyze
 14. When an alarm is fired, I hear two sounds together.
 13. When changing the default sound for a category it doesn't affect any existing/new reminder from that category
 c. When restoring a reminder from archive its date should be on the upcoming day of week which is the same day of week as the original date.

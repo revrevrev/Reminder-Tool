@@ -7,6 +7,7 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mockConstruction
@@ -170,6 +171,42 @@ class SoundPlayerTest {
             // Player must be released and not left dangling
             verify(mockMp1).release()
             verify(mockMp1, never()).start()
+        }
+    }
+
+    /**
+     * Regression test for defect 15 (primary crash): when the user dismisses a non-continuous
+     * alarm (tapping Done/Snooze in AlarmActivity) while the MediaPlayer's last play is
+     * completing, stop() releases the player first, but the completion listener was already
+     * dispatched and fires afterwards. The listener called player.release() on an already-released
+     * player → IllegalStateException on the media thread → app crash.
+     *
+     * Fix: wrap the completion listener body in try/catch so the stale callback is silently swallowed.
+     */
+    @Test
+    fun `stop called before completion listener fires does not throw IllegalStateException`() {
+        mockConstruction(AudioAttributes.Builder::class.java) { builder, _ ->
+            whenever(builder.setUsage(any<Int>())).thenReturn(builder)
+            whenever(builder.setContentType(any<Int>())).thenReturn(builder)
+            doReturn(null).whenever(builder).build()
+        }.use {
+            var releaseCount = 0
+            doAnswer { releaseCount++; if (releaseCount > 1) throw IllegalStateException("already released") }
+                .whenever(mockMp1).release()
+
+            SoundPlayer.startAlarm(mockContext, "chime", 70, continuous = false)
+
+            val captor = argumentCaptor<MediaPlayer.OnCompletionListener>()
+            verify(mockMp1).setOnCompletionListener(captor.capture())
+
+            // User taps Done/Snooze — releases the player
+            SoundPlayer.stop()
+            assertEquals("stop() must release once", 1, releaseCount)
+
+            // Completion callback arrives late — must NOT throw
+            // FAILS before fix: IllegalStateException from double-release propagates
+            // PASSES after fix: caught by try-catch inside the listener
+            captor.firstValue.onCompletion(mockMp1)
         }
     }
 }

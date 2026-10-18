@@ -104,6 +104,7 @@ class ReminderSheetViewModel @Inject constructor(
 
     fun save(onComplete: (Int) -> Unit) {
         val d = _draft.value
+        val categoryId = d.categoryId ?: return
         if (!d.isValid()) return
         viewModelScope.launch {
             val reminder = Reminder(
@@ -111,7 +112,7 @@ class ReminderSheetViewModel @Inject constructor(
                 date = if (d.type == ReminderType.ONCE) d.date else null,
                 day = if (d.type == ReminderType.WEEKLY) d.day else null,
                 time = d.time,
-                categoryId = d.categoryId!!,
+                categoryId = categoryId,
                 sound = if (d.soundOverrideEnabled) d.sound else null,
                 volume = if (d.soundOverrideEnabled) d.volume else null,
                 continuous = if (d.soundOverrideEnabled) d.continuous else null,

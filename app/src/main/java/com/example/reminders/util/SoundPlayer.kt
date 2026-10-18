@@ -67,13 +67,19 @@ object SoundPlayer {
         if (!continuous) {
             val plays = intArrayOf(1)
             mp.setOnCompletionListener { player ->
-                if (plays[0] < 3 && mediaPlayer != null) {
-                    plays[0]++
-                    player.seekTo(0)
-                    player.start()
-                } else {
+                // Guard against race: stop() may have already released the player before this
+                // callback fires (completion dispatched just as the user dismisses the alarm).
+                try {
+                    if (plays[0] < 3 && mediaPlayer != null) {
+                        plays[0]++
+                        player.seekTo(0)
+                        player.start()
+                    } else {
+                        mediaPlayer = null
+                        player.release()
+                    }
+                } catch (_: Exception) {
                     mediaPlayer = null
-                    player.release()
                 }
             }
         }

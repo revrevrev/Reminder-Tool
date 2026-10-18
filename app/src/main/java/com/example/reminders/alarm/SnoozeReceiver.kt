@@ -35,6 +35,8 @@ class SnoozeReceiver : BroadcastReceiver() {
                 alarmScheduler.schedule(updated)
                 val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 nm.cancel(reminderId)
+            } catch (_: Exception) {
+                // Swallow — pendingResult.finish() must still run below
             } finally {
                 pendingResult.finish()
             }
