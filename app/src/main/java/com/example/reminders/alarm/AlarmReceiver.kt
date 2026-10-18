@@ -97,8 +97,6 @@ class AlarmReceiver : BroadcastReceiver() {
 
                 val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 nm.notify(reminderId, notification)
-
-                context.startActivity(alarmIntent)
             } catch (_: Exception) {
                 // Swallow — pendingResult.finish() must still run below
             } finally {

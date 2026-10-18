@@ -15,8 +15,8 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## Active
 
 ## ❔Ready for Testing
-15. Too many crashes. Need to analyze
 14. When an alarm is fired, I hear two sounds together.
+15. Too many crashes. Need to analyze
 13. When changing the default sound for a category it doesn't affect any existing/new reminder from that category
 e. When restoring a reminder - open it for editing
 
