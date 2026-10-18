@@ -70,7 +70,11 @@ class ReminderSheetViewModel @Inject constructor(
     }
 
     fun updateName(v: String) { _draft.value = _draft.value.copy(name = v) }
-    fun updateType(v: ReminderType) { _draft.value = _draft.value.copy(type = v) }
+    fun updateType(v: ReminderType) {
+        val current = _draft.value
+        val dayForWeekly = if (v == ReminderType.WEEKLY) DateTimeUtil.dateStringToDayIndex(current.date) else current.day
+        _draft.value = current.copy(type = v, day = dayForWeekly)
+    }
     fun updateDate(v: String) { _draft.value = _draft.value.copy(date = v) }
     fun updateDay(v: Int) { _draft.value = _draft.value.copy(day = v) }
     fun updateTime(v: String) { _draft.value = _draft.value.copy(time = v) }

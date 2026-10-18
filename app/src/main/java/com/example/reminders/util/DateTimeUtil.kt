@@ -100,6 +100,8 @@ object DateTimeUtil {
         return candidate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 
+    fun dateStringToDayIndex(dateStr: String): Int = LocalDate.parse(dateStr).dayOfWeek.value % 7
+
     private fun intToDayOfWeek(day: Int): DayOfWeek = when (day) {
         0 -> DayOfWeek.SUNDAY
         1 -> DayOfWeek.MONDAY
