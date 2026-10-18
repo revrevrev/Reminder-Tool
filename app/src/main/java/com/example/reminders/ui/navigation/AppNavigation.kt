@@ -13,10 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.reminders.ui.screen.*
 import com.example.reminders.ui.theme.*
 
@@ -34,7 +36,7 @@ fun AppNavigation() {
     val currentEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentEntry?.destination?.route ?: "home"
     val activeTab = when {
-        currentRoute == "home" -> NavTab.Reminders.route
+        currentRoute.startsWith("home") -> NavTab.Reminders.route
         currentRoute == "categories" -> NavTab.Categories.route
         else -> NavTab.Settings.route   // settings + archive both highlight Settings tab
     }
@@ -79,7 +81,16 @@ fun AppNavigation() {
             startDestination = "home",
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("home") { HomeScreen() }
+            composable(
+                route = "home?pendingEdit={pendingEditId}",
+                arguments = listOf(navArgument("pendingEditId") {
+                    type = NavType.IntType
+                    defaultValue = -1
+                })
+            ) { backStackEntry ->
+                val pendingEditId = backStackEntry.arguments?.getInt("pendingEditId")?.takeIf { it != -1 }
+                HomeScreen(pendingEditId = pendingEditId)
+            }
             composable("categories") { CategoriesScreen() }
             composable("settings") {
                 SettingsScreen(onNavigateToArchive = { navController.navigate("archive") })
@@ -87,9 +98,9 @@ fun AppNavigation() {
             composable("archive") {
                 ArchiveScreen(
                     onBack = { navController.popBackStack() },
-                    onOpenEdit = {
-                        navController.navigate("home") {
-                            popUpTo("home") { inclusive = false }
+                    onOpenEdit = { reminderId ->
+                        navController.navigate("home?pendingEdit=$reminderId") {
+                            popUpTo("home") { inclusive = true }
                         }
                     }
                 )

@@ -25,12 +25,20 @@ import com.example.reminders.viewmodel.ReminderSheetViewModel
 
 @Composable
 fun HomeScreen(
+    pendingEditId: Int? = null,
     homeVm: HomeViewModel = hiltViewModel(),
     sheetVm: ReminderSheetViewModel = hiltViewModel()
 ) {
     val state by homeVm.uiState.collectAsState()
     var showSheet by remember { mutableStateOf(false) }
     var editReminderId by remember { mutableStateOf<Int?>(null) }
+
+    LaunchedEffect(pendingEditId) {
+        if (pendingEditId != null) {
+            sheetVm.loadReminder(pendingEditId)
+            showSheet = true
+        }
+    }
 
     val filteredReminders = if (state.filterCategoryId == null) state.reminders
     else state.reminders.filter { it.categoryId == state.filterCategoryId }

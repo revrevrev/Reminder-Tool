@@ -18,8 +18,7 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 15. Too many crashes. Need to analyze
 14. When an alarm is fired, I hear two sounds together.
 13. When changing the default sound for a category it doesn't affect any existing/new reminder from that category
-c. When restoring a reminder from archive its date should be on the upcoming day of week which is the same day of week as the original date.
-d. When changing a reminder from oneof to weekly, its day of week should be same as the day of week of the oneof reminder date.
+e. When restoring a reminder - open it for editing
 
 
 ## ✔️Manually verified
@@ -37,5 +36,7 @@ d. When changing a reminder from oneof to weekly, its day of week should be same
 5. When a reminder is fired as a notification, the user should be able to mark it complete within the notification itself.
 a. צלצול רציף
 b. In settings, Add 1 min to the possible snooze options.
+c. When restoring a reminder from archive its date should be on the upcoming day of week which is the same day of week as the original date.
+d. When changing a reminder from oneof to weekly, its day of week should be same as the day of week of the oneof reminder date.
 
 ## ❌ Failed in retest
