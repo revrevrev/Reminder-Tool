@@ -39,9 +39,8 @@ class ReminderRepository @Inject constructor(private val dao: ReminderDao) {
         }
     }
 
-    suspend fun snooze(reminder: Reminder, minutes: Int): Reminder {
-        val occurrence = DateTimeUtil.nextFireTimeMs(reminder)
-        val snoozedUntil = occurrence + minutes * 60_000L
+    suspend fun snooze(reminder: Reminder, minutes: Int, nowMs: Long = System.currentTimeMillis()): Reminder {
+        val snoozedUntil = nowMs + minutes * 60_000L
         val updated = reminder.copy(snoozeUntil = snoozedUntil)
         dao.update(updated)
         return updated
