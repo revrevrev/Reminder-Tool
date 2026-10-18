@@ -37,7 +37,7 @@ class ArchiveViewModel @Inject constructor(
             val needsBump = reminder.date != null &&
                     DateTimeUtil.parseDateTimeMs(reminder.date, reminder.time) < System.currentTimeMillis()
             val finalId = if (needsBump) {
-                reminderRepo.save(restored.copy(date = DateTimeUtil.tomorrowDateString()))
+                reminderRepo.save(restored.copy(date = DateTimeUtil.nextSameDayOfWeekDateString(reminder.date!!)))
             } else restored.id
             onOpenEdit(finalId)
         }

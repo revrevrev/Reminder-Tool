@@ -166,6 +166,12 @@ object DateTimeUtil {
     fun todayDateString(): String = LocalDate.now().toString()
     fun tomorrowDateString(): String = LocalDate.now().plusDays(1).toString()
 
+    // Returns the next occurrence of the same day of week as originalDateStr, starting from tomorrow.
+    fun nextSameDayOfWeekDateString(originalDateStr: String, today: LocalDate = LocalDate.now()): String {
+        val dayOfWeek = LocalDate.parse(originalDateStr).dayOfWeek
+        return today.plusDays(1).with(TemporalAdjusters.nextOrSame(dayOfWeek)).toString()
+    }
+
     fun isInPast(date: String, time: String): Boolean {
         val dt = LocalDateTime.of(LocalDate.parse(date), LocalTime.parse(time))
         return dt.isBefore(LocalDateTime.now())
