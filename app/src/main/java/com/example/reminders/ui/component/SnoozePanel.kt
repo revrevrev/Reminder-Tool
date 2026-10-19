@@ -17,10 +17,20 @@ import com.example.reminders.ui.theme.*
 
 private val SNOOZE_PRESETS = listOf(5, 10, 15, 30)
 
+internal fun applySnoozePreset(
+    preset: Int,
+    onSnoozeChange: (Int) -> Unit,
+    onSnoozeNow: ((Int) -> Unit)?
+) {
+    onSnoozeChange(preset)
+    onSnoozeNow?.invoke(preset)
+}
+
 @Composable
 fun SnoozePanel(
     snoozeMinutes: Int,
     onSnoozeChange: (Int) -> Unit,
+    onSnoozeNow: ((Int) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -77,7 +87,7 @@ fun SnoozePanel(
                     modifier = Modifier
                         .clip(PillShape)
                         .background(if (selected) AccentMain else Surface)
-                        .clickable { onSnoozeChange(preset) }
+                        .clickable { applySnoozePreset(preset, onSnoozeChange, onSnoozeNow) }
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                     contentAlignment = Alignment.Center
                 ) {

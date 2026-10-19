@@ -102,7 +102,11 @@ fun AlarmScreen(
             ) {
                 SnoozePanel(
                     snoozeMinutes = state.snoozeMinutes,
-                    onSnoozeChange = { vm.setSnoozeMinutes(it) }
+                    onSnoozeChange = { vm.setSnoozeMinutes(it) },
+                    onSnoozeNow = { minutes ->
+                        vm.setSnoozeMinutes(minutes)
+                        vm.snooze(onSnooze)
+                    }
                 )
 
                 Row(

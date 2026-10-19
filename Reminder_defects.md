@@ -13,10 +13,9 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## ##########################################
 
 ## Active
-19. When the reminder is fired when the screen is off - it shows a big dialog with different snooze options. Can we have the same dialog when the screen is on?
-f. When a reminder is showing snooze options and the user presses one of them - e.g. 5 / 10 - it can be considered as if he pressed also the snooze and to snooze for 5 min.
 
 ## ❔Ready for Testing
+f. When a reminder is showing snooze options and the user presses one of them - e.g. 5 / 10 - it can be considered as if he pressed also the snooze and to snooze for 5 min.
 e. When a reminder is dismissed / snoozed, its content should be copied to the dashboard in this format: reminder name - category
 
 
@@ -44,4 +43,6 @@ b. In settings, Add 1 min to the possible snooze options.
 c. When restoring a reminder from archive its date should be on the upcoming day of week which is the same day of week as the original date.
 d. When changing a reminder from oneof to weekly, its day of week should be same as the day of week of the oneof reminder date.
 
-## ❌ Failed in retest
+## Cancelled
+19. When the reminder is fired when the screen is off - it shows a big dialog with different snooze options. Can we have the same dialog when the screen is on? - decided to withdraw as this is not natural and can become a burden.
+
