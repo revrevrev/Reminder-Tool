@@ -1,5 +1,6 @@
 package com.example.reminders.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.reminders.alarm.AlarmScheduler
@@ -9,7 +10,9 @@ import com.example.reminders.data.model.ReminderType
 import com.example.reminders.data.repository.CategoryRepository
 import com.example.reminders.data.repository.ReminderRepository
 import com.example.reminders.data.repository.SettingsRepository
+import com.example.reminders.util.copyReminderToClipboard
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,6 +25,7 @@ data class AlarmUiState(
 
 @HiltViewModel
 class AlarmViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val reminderRepo: ReminderRepository,
     private val categoryRepo: CategoryRepository,
     private val settingsRepo: SettingsRepository,
@@ -49,6 +53,7 @@ class AlarmViewModel @Inject constructor(
         viewModelScope.launch {
             val updated = reminderRepo.snooze(reminder, _state.value.snoozeMinutes)
             alarmScheduler.schedule(updated)
+            copyReminderToClipboard(context, reminder.name, _state.value.category?.name)
             onDone()
         }
     }
@@ -61,6 +66,7 @@ class AlarmViewModel @Inject constructor(
             if (reminder.type == ReminderType.WEEKLY) {
                 alarmScheduler.schedule(updated)
             }
+            copyReminderToClipboard(context, reminder.name, _state.value.category?.name)
             onDone()
         }
     }

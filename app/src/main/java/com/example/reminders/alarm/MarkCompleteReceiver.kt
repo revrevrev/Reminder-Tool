@@ -5,19 +5,23 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.example.reminders.data.model.ReminderType
+import com.example.reminders.data.repository.CategoryRepository
 import com.example.reminders.data.repository.ReminderRepository
 import com.example.reminders.util.NotificationUtil
 import com.example.reminders.util.SoundPlayer
+import com.example.reminders.util.copyReminderToClipboard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MarkCompleteReceiver : BroadcastReceiver() {
 
     @Inject lateinit var reminderRepo: ReminderRepository
+    @Inject lateinit var categoryRepo: CategoryRepository
     @Inject lateinit var alarmScheduler: AlarmScheduler
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -33,6 +37,10 @@ class MarkCompleteReceiver : BroadcastReceiver() {
                 alarmScheduler.cancel(reminder.id)
                 if (reminder.type == ReminderType.WEEKLY) {
                     alarmScheduler.schedule(updated)
+                }
+                val categoryName = categoryRepo.getById(reminder.categoryId)?.name
+                withContext(Dispatchers.Main) {
+                    copyReminderToClipboard(context, reminder.name, categoryName)
                 }
                 SoundPlayer.stop()
                 val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

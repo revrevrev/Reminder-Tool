@@ -13,17 +13,18 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## ##########################################
 
 ## Active
-19.
+19. When the reminder is fired when the screen is off - it shows a big dialog with different snooze options. Can we have the same dialog when the screen is on?
+f. When a reminder is showing snooze options and the user presses one of them - e.g. 5 / 10 - it can be considered as if he pressed also the snooze and to snooze for 5 min.
 
 ## ❔Ready for Testing
-18. When starting to add a new reminder, a scroll dismisses the dialog and you have to start creating it again.
-17. For recurring reminders when I press snooze it doesn't really snooze when the time comes
-16. When the screen is not locked there is no sound when the notification pops it only shows as popup but no sound
-15. Too many crashes. Need to analyze
+e. When a reminder is dismissed / snoozed, its content should be copied to the dashboard in this format: reminder name - category
 
 
 ## ✔️Manually verified
-14. When an alarm is fired, I hear two sounds together.
+18. When starting to add a new reminder, a scroll dismisses the dialog and you have to start creating it again.
+17. For recurring reminders when I press snooze it doesn't really snooze when the time comes
+16. When the screen is not locked there is no sound when the notification pops it only shows as popup but no sound
+15. Too many crashes. Need to analyze14. When an alarm is fired, I hear two sounds together.
 13. When changing the default sound for a category it doesn't affect any existing/new reminder from that category
 e. When restoring a reminder - open it for editing
 7. The app allows to set an alarm for a past date/time. Should prevent and show a clear message

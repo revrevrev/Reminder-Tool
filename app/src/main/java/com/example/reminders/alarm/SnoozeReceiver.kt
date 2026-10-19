@@ -4,21 +4,25 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.example.reminders.data.repository.CategoryRepository
 import com.example.reminders.data.repository.ReminderRepository
 import com.example.reminders.data.repository.SettingsRepository
 import com.example.reminders.util.NotificationUtil
 import com.example.reminders.util.SoundPlayer
+import com.example.reminders.util.copyReminderToClipboard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SnoozeReceiver : BroadcastReceiver() {
 
     @Inject lateinit var reminderRepo: ReminderRepository
+    @Inject lateinit var categoryRepo: CategoryRepository
     @Inject lateinit var settingsRepo: SettingsRepository
     @Inject lateinit var alarmScheduler: AlarmScheduler
 
@@ -34,6 +38,10 @@ class SnoozeReceiver : BroadcastReceiver() {
                 val snoozeMinutes = settingsRepo.defaultSnoozeMinutes.first()
                 val updated = reminderRepo.snooze(reminder, snoozeMinutes)
                 alarmScheduler.schedule(updated)
+                val categoryName = categoryRepo.getById(reminder.categoryId)?.name
+                withContext(Dispatchers.Main) {
+                    copyReminderToClipboard(context, reminder.name, categoryName)
+                }
                 SoundPlayer.stop()
                 val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 nm.cancel(reminderId)
