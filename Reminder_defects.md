@@ -13,10 +13,10 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## ##########################################
 
 ## Active
-18. When starting to add a new reminder, a scroll dismisses the dialog and you have to start it again.
 19.
 
 ## ❔Ready for Testing
+18. When starting to add a new reminder, a scroll dismisses the dialog and you have to start creating it again.
 17. For recurring reminders when I press snooze it doesn't really snooze when the time comes
 16. When the screen is not locked there is no sound when the notification pops it only shows as popup but no sound
 15. Too many crashes. Need to analyze
