@@ -20,6 +20,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -141,9 +144,11 @@ fun ReminderSheet(
                         .fillMaxWidth()
                         .defaultMinSize(minHeight = 44.dp)
                         .focusRequester(focusRequester),
-                    singleLine = true,
+                    maxLines = 4,
                     textStyle = AppTypography.bodyLarge.copy(fontSize = 16.sp),
-                    shape = PillShape,
+                    shape = MaterialTheme.shapes.large,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = Bg, unfocusedContainerColor = Bg,
                         focusedBorderColor = AccentMain, unfocusedBorderColor = Neutral300

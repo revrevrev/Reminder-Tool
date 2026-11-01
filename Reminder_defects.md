@@ -15,11 +15,12 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## Active
 
 ## ❔Ready for Testing
-20. When I get a reminder in lock screen, the category should be displayed as well.
+21. When editing a reminder, sometime one line isn't enough. Moreover I can't get the clipboard options like select all and copy (wanted to edit it elsewhere since there wasn't enough room)
 
 
 
 ## ✔️Manually verified
+20. When I get a reminder in lock screen, the category should be displayed as well.
 f. When a reminder is showing snooze options and the user presses one of them - e.g. 5 / 10 - it can be considered as if he pressed also the snooze and to snooze for 5 min.
 e. When a reminder is dismissed / snoozed, its content should be copied to the dashboard in this format: reminder name - category
 18. When starting to add a new reminder, a scroll dismisses the dialog and you have to start creating it again.
