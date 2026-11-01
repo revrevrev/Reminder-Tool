@@ -15,11 +15,13 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## Active
 
 ## ❔Ready for Testing
-f. When a reminder is showing snooze options and the user presses one of them - e.g. 5 / 10 - it can be considered as if he pressed also the snooze and to snooze for 5 min.
-e. When a reminder is dismissed / snoozed, its content should be copied to the dashboard in this format: reminder name - category
+20. When I get a reminder in lock screen, the category should be displayed as well.
+
 
 
 ## ✔️Manually verified
+f. When a reminder is showing snooze options and the user presses one of them - e.g. 5 / 10 - it can be considered as if he pressed also the snooze and to snooze for 5 min.
+e. When a reminder is dismissed / snoozed, its content should be copied to the dashboard in this format: reminder name - category
 18. When starting to add a new reminder, a scroll dismisses the dialog and you have to start creating it again.
 17. For recurring reminders when I press snooze it doesn't really snooze when the time comes
 16. When the screen is not locked there is no sound when the notification pops it only shows as popup but no sound

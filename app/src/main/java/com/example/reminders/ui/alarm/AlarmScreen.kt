@@ -18,6 +18,7 @@ import com.example.reminders.ui.component.PulsingRings
 import com.example.reminders.ui.component.SnoozePanel
 import com.example.reminders.ui.theme.*
 import com.example.reminders.util.DateTimeUtil
+import com.example.reminders.util.buildAlarmDisplayItems
 import com.example.reminders.util.categoryTone
 import com.example.reminders.viewmodel.AlarmViewModel
 
@@ -29,6 +30,7 @@ fun AlarmScreen(
 ) {
     val state by vm.uiState.collectAsState()
     val reminder = state.reminder ?: return
+    val displayItems = buildAlarmDisplayItems(reminder, state.category)
     val catColor = state.category?.color ?: "accent-500"
     val tone = categoryTone(catColor)
 
@@ -77,13 +79,17 @@ fun AlarmScreen(
 
             Spacer(Modifier.height(20.dp))
 
-            // Name + notes
+            // Name + category + notes
             Text(
-                text = reminder.name,
+                text = displayItems.name,
                 style = AppTypography.displayMedium,
                 color = tone.fg
             )
-            reminder.notes?.let {
+            displayItems.categoryName?.let {
+                Spacer(Modifier.height(6.dp))
+                Text(text = it, style = AppTypography.bodyLarge, color = tone.fg.copy(alpha = 0.75f))
+            }
+            displayItems.notes?.let {
                 Spacer(Modifier.height(8.dp))
                 Text(text = it, style = AppTypography.bodyLarge, color = tone.fg.copy(alpha = 0.85f))
             }
