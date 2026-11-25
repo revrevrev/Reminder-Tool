@@ -19,7 +19,6 @@ import com.example.reminders.ui.component.*
 import com.example.reminders.ui.sheet.ReminderSheet
 import com.example.reminders.ui.theme.*
 import com.example.reminders.util.DateTimeUtil
-import com.example.reminders.util.categoryTone
 import com.example.reminders.viewmodel.HomeViewModel
 import com.example.reminders.viewmodel.ReminderSheetViewModel
 
@@ -42,9 +41,6 @@ fun HomeScreen(
 
     val filteredReminders = if (state.filterCategoryId == null) state.reminders
     else state.reminders.filter { it.categoryId == state.filterCategoryId }
-
-    val hero = filteredReminders.firstOrNull()
-    val rest = filteredReminders.drop(1)
 
     if (showSheet) {
         ReminderSheet(
@@ -94,50 +90,25 @@ fun HomeScreen(
                     }
                 }
 
-                // Hero card or filter empty
+                // Reminder list or filter empty
                 if (filteredReminders.isEmpty() && state.filterCategoryId != null) {
                     item {
                         val catName = state.categories.firstOrNull { it.id == state.filterCategoryId }?.name ?: ""
                         FilterEmptyState(categoryName = catName, onShowAll = { homeVm.setFilter(null) })
                     }
-                } else if (hero != null) {
-                    item {
-                        val tone = categoryTone(state.categories.firstOrNull { it.id == hero.categoryId }?.color ?: "accent-500")
-                        HeroCard(
-                            reminder = hero,
-                            tone = tone,
+                } else {
+                    items(filteredReminders, key = { it.id }) { reminder ->
+                        val catColor = state.categories.firstOrNull { it.id == reminder.categoryId }?.color ?: "accent-500"
+                        ReminderRow(
+                            reminder = reminder,
+                            categoryColor = catColor,
                             onClick = {
-                                sheetVm.loadReminder(hero.id)
+                                sheetVm.loadReminder(reminder.id)
                                 showSheet = true
                             },
-                            onDone = { homeVm.markDone(hero) },
-                            onPauseResume = { homeVm.togglePause(hero) }
+                            onPauseResume = { homeVm.togglePause(reminder) },
+                            modifier = Modifier.padding(horizontal = 12.dp)
                         )
-                    }
-
-                    if (rest.isNotEmpty()) {
-                        item {
-                            Text(
-                                "בהמשך",
-                                style = AppTypography.labelMedium,
-                                color = Neutral700,
-                                modifier = Modifier.padding(start = 24.dp, top = 24.dp, bottom = 6.dp)
-                            )
-                        }
-
-                        items(rest, key = { it.id }) { reminder ->
-                            val catColor = state.categories.firstOrNull { it.id == reminder.categoryId }?.color ?: "accent-500"
-                            ReminderRow(
-                                reminder = reminder,
-                                categoryColor = catColor,
-                                onClick = {
-                                    sheetVm.loadReminder(reminder.id)
-                                    showSheet = true
-                                },
-                                onPauseResume = { homeVm.togglePause(reminder) },
-                                modifier = Modifier.padding(horizontal = 12.dp)
-                            )
-                        }
                     }
                 }
             }
