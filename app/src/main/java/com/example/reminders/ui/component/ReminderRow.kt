@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCopy
+import androidx.compose.material.icons.outlined.NotificationsOff
 import androidx.compose.material.icons.outlined.Pause
 import androidx.compose.material.icons.outlined.PlayArrow
+import androidx.compose.material.icons.outlined.Replay
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,14 +29,17 @@ fun ReminderRow(
     onClick: () -> Unit,
     onPauseResume: () -> Unit,
     onCopy: () -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val isPaused = reminder.paused
-    val rowBg = if (isPaused) Neutral200 else Color.Transparent
-    val nameColor = if (isPaused) Neutral500 else TextColor
-    val timeColor = if (isPaused) Neutral500 else TextColor
-    val barColor = if (isPaused) Neutral300 else categoryTone(categoryColor).base
-    val iconTint = if (isPaused) Neutral500 else Neutral700
+    val isDismissed = reminder.dismissed
+    val muted = isPaused || isDismissed
+    val rowBg = if (muted) Neutral200 else Color.Transparent
+    val nameColor = if (muted) Neutral500 else TextColor
+    val timeColor = if (muted) Neutral500 else TextColor
+    val barColor = if (muted) Neutral300 else categoryTone(categoryColor).base
+    val iconTint = if (muted) Neutral500 else Neutral700
 
     Row(
         modifier = modifier
@@ -76,6 +81,8 @@ fun ReminderRow(
         Column(modifier = Modifier.weight(1f)) {
             Text(text = reminder.name, style = AppTypography.titleSmall, color = nameColor)
             when {
+                isDismissed ->
+                    Text("בוטלה", style = AppTypography.labelMedium, color = Neutral500)
                 reminder.snoozeUntil != null ->
                     Text("נודניק עד ${DateTimeUtil.formatTime(reminder.snoozeUntil)}", style = AppTypography.labelMedium, color = if (isPaused) Neutral500 else Accent700)
                 isPaused ->
@@ -88,6 +95,16 @@ fun ReminderRow(
             Icon(
                 imageVector = Icons.Outlined.ContentCopy,
                 contentDescription = "העתק",
+                tint = iconTint,
+                modifier = Modifier.size(18.dp)
+            )
+        }
+
+        // Dismiss / Undo-dismiss icon button
+        IconButton(onClick = onDismiss, modifier = Modifier.size(34.dp)) {
+            Icon(
+                imageVector = if (isDismissed) Icons.Outlined.Replay else Icons.Outlined.NotificationsOff,
+                contentDescription = if (isDismissed) "שחזר" else "בטל",
                 tint = iconTint,
                 modifier = Modifier.size(18.dp)
             )

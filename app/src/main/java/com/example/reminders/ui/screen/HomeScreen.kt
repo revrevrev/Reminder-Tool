@@ -112,6 +112,7 @@ fun HomeScreen(
                             },
                             onPauseResume = { homeVm.togglePause(reminder) },
                             onCopy = { copyReminderToClipboard(context, reminder.name, category?.name) },
+                            onDismiss = { homeVm.toggleDismiss(reminder) },
                             modifier = Modifier.padding(horizontal = 12.dp)
                         )
                     }

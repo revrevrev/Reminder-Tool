@@ -26,13 +26,13 @@ class ReminderRepository @Inject constructor(private val dao: ReminderDao) {
     suspend fun markDone(reminder: Reminder, nowMs: Long = System.currentTimeMillis()): Reminder {
         return when (reminder.type) {
             ReminderType.ONCE -> {
-                val updated = reminder.copy(archived = true, archivedAt = nowMs, snoozeUntil = null)
+                val updated = reminder.copy(archived = true, archivedAt = nowMs, snoozeUntil = null, dismissed = false)
                 dao.update(updated)
                 updated
             }
             ReminderType.WEEKLY -> {
                 val occurrence = DateTimeUtil.currentOccurrenceMs(reminder, nowMs)
-                val updated = reminder.copy(skipUntil = occurrence, snoozeUntil = null)
+                val updated = reminder.copy(skipUntil = occurrence, snoozeUntil = null, dismissed = false)
                 dao.update(updated)
                 updated
             }
@@ -48,6 +48,12 @@ class ReminderRepository @Inject constructor(private val dao: ReminderDao) {
 
     suspend fun setPaused(reminder: Reminder, paused: Boolean): Reminder {
         val updated = reminder.copy(paused = paused, snoozeUntil = null)
+        dao.update(updated)
+        return updated
+    }
+
+    suspend fun setDismissed(reminder: Reminder, dismissed: Boolean): Reminder {
+        val updated = reminder.copy(dismissed = dismissed)
         dao.update(updated)
         return updated
     }

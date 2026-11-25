@@ -22,6 +22,7 @@ data class Reminder(
     val continuous: Boolean? = null,  // null = inherit from category
     val notes: String? = null,
     val paused: Boolean = false,
+    val dismissed: Boolean = false,   // dismissed in advance: alert cancelled, item kept in list until its time
     val snoozeUntil: Long? = null,    // epoch millis
     val skipUntil: Long? = null,      // epoch millis (weekly: skip until after this)
     val archived: Boolean = false,

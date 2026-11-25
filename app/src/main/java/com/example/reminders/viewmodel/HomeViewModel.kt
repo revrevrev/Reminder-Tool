@@ -76,6 +76,21 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun toggleDismiss(reminder: Reminder) {
+        viewModelScope.launch {
+            undoReminder = reminder
+            val updated = reminderRepo.setDismissed(reminder, !reminder.dismissed)
+            // Keep the alarm scheduled either way: when dismissed it still fires at its time,
+            // but AlarmReceiver finalizes it silently instead of ringing.
+            alarmScheduler.schedule(updated)
+            if (updated.dismissed) {
+                showToast(ToastData("„${reminder.name}” בוטלה", "ביטול") { undo() })
+            } else {
+                showToast(ToastData("„${reminder.name}” שוחזרה", "ביטול") { undo() })
+            }
+        }
+    }
+
     fun deleteReminder(reminder: Reminder) {
         viewModelScope.launch {
             undoReminder = reminder

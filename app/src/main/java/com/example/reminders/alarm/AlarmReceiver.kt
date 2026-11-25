@@ -22,6 +22,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
     @Inject lateinit var reminderRepo: ReminderRepository
     @Inject lateinit var categoryRepo: CategoryRepository
+    @Inject lateinit var alarmScheduler: AlarmScheduler
 
     companion object {
         const val EXTRA_REMINDER_ID = "reminder_id"
@@ -63,6 +64,15 @@ class AlarmReceiver : BroadcastReceiver() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val reminder = reminderRepo.getById(reminderId)
+
+                // Dismissed in advance: finalize silently (ONCE archives, WEEKLY advances to
+                // next week) instead of ringing. The undo window has now closed.
+                if (reminder != null && reminder.dismissed) {
+                    val finalized = reminderRepo.markDone(reminder)
+                    if (!finalized.archived) alarmScheduler.schedule(finalized)
+                    return@launch
+                }
+
                 val category = reminder?.let { categoryRepo.getById(it.categoryId) }
 
                 val (title, body) = if (reminder != null && category != null)

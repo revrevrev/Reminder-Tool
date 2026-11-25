@@ -20,7 +20,7 @@ class ReminderTypeConverter {
     fun toType(value: String): ReminderType = ReminderType.valueOf(value)
 }
 
-@Database(entities = [Reminder::class, Category::class], version = 2, exportSchema = false)
+@Database(entities = [Reminder::class, Category::class], version = 3, exportSchema = false)
 @TypeConverters(ReminderTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun reminderDao(): ReminderDao
@@ -31,6 +31,12 @@ abstract class AppDatabase : RoomDatabase() {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE categories ADD COLUMN continuous INTEGER NOT NULL DEFAULT 0")
                 db.execSQL("ALTER TABLE reminders ADD COLUMN continuous INTEGER DEFAULT NULL")
+            }
+        }
+
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE reminders ADD COLUMN dismissed INTEGER NOT NULL DEFAULT 0")
             }
         }
 

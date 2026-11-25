@@ -18,7 +18,7 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 21. When editing a reminder, sometime one line isn't enough. Moreover I can't get the clipboard options like select all and copy (wanted to edit it elsewhere since there wasn't enough room)
 22. Remove the effect of the first reminder being expanded. Just show it within the list
 23. Each element in the list should also have a button for copy (which copied to clipboard the same content as when dismissing)
-24. Each element in the list should also have a button for dismiss. In that case the item will remain in the list until its time has come, so the same button can be used to undo the dismissal.
+24. Each element in the list should also have a button for dismiss. In that case the item will remain in the list until its time has come, so the user can use the same button (with different icon) to undo the dismissal as long as still relevant.
 
 
 ## ✔️Manually verified
