@@ -49,9 +49,9 @@ class ReminderRowDismissButtonTest {
             src.contains("reminder.dismissed")
         )
         assertTrue(
-            "Defect 24: the button must show a dismiss icon when active and an undo icon " +
+            "Defect 24: the button must show a done icon when active and an undo icon " +
             "when already dismissed",
-            src.contains("NotificationsOff") && src.contains("Replay")
+            src.contains("Done") && src.contains("Replay")
         )
     }
 

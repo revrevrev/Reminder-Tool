@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.NotificationsOff
+import androidx.compose.material.icons.outlined.Done
 import androidx.compose.material.icons.outlined.Pause
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.Replay
@@ -103,7 +103,7 @@ fun ReminderRow(
         // Dismiss / Undo-dismiss icon button
         IconButton(onClick = onDismiss, modifier = Modifier.size(34.dp)) {
             Icon(
-                imageVector = if (isDismissed) Icons.Outlined.Replay else Icons.Outlined.NotificationsOff,
+                imageVector = if (isDismissed) Icons.Outlined.Replay else Icons.Outlined.Done,
                 contentDescription = if (isDismissed) "שחזר" else "בטל",
                 tint = iconTint,
                 modifier = Modifier.size(18.dp)

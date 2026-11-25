@@ -15,13 +15,12 @@ Note: After fixing a defect, move it under Ready for Testing. Never move it unde
 ## Active
 
 ## ❔Ready for Testing
+
+## ✔️Manually verified
 21. When editing a reminder, sometime one line isn't enough. Moreover I can't get the clipboard options like select all and copy (wanted to edit it elsewhere since there wasn't enough room)
 22. Remove the effect of the first reminder being expanded. Just show it within the list
 23. Each element in the list should also have a button for copy (which copied to clipboard the same content as when dismissing)
 24. Each element in the list should also have a button for dismiss. In that case the item will remain in the list until its time has come, so the user can use the same button (with different icon) to undo the dismissal as long as still relevant.
-
-
-## ✔️Manually verified
 20. When I get a reminder in lock screen, the category should be displayed as well.
 f. When a reminder is showing snooze options and the user presses one of them - e.g. 5 / 10 - it can be considered as if he pressed also the snooze and to snooze for 5 min.
 e. When a reminder is dismissed / snoozed, its content should be copied to the dashboard in this format: reminder name - category
