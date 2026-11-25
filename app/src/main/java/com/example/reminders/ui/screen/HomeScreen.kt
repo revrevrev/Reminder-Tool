@@ -12,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reminders.data.model.Reminder
@@ -19,6 +20,7 @@ import com.example.reminders.ui.component.*
 import com.example.reminders.ui.sheet.ReminderSheet
 import com.example.reminders.ui.theme.*
 import com.example.reminders.util.DateTimeUtil
+import com.example.reminders.util.copyReminderToClipboard
 import com.example.reminders.viewmodel.HomeViewModel
 import com.example.reminders.viewmodel.ReminderSheetViewModel
 
@@ -29,6 +31,7 @@ fun HomeScreen(
     sheetVm: ReminderSheetViewModel = hiltViewModel()
 ) {
     val state by homeVm.uiState.collectAsState()
+    val context = LocalContext.current
     var showSheet by remember { mutableStateOf(false) }
     var editReminderId by remember { mutableStateOf<Int?>(null) }
 
@@ -98,7 +101,8 @@ fun HomeScreen(
                     }
                 } else {
                     items(filteredReminders, key = { it.id }) { reminder ->
-                        val catColor = state.categories.firstOrNull { it.id == reminder.categoryId }?.color ?: "accent-500"
+                        val category = state.categories.firstOrNull { it.id == reminder.categoryId }
+                        val catColor = category?.color ?: "accent-500"
                         ReminderRow(
                             reminder = reminder,
                             categoryColor = catColor,
@@ -107,6 +111,7 @@ fun HomeScreen(
                                 showSheet = true
                             },
                             onPauseResume = { homeVm.togglePause(reminder) },
+                            onCopy = { copyReminderToClipboard(context, reminder.name, category?.name) },
                             modifier = Modifier.padding(horizontal = 12.dp)
                         )
                     }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Pause
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.*
@@ -25,6 +26,7 @@ fun ReminderRow(
     categoryColor: String,
     onClick: () -> Unit,
     onPauseResume: () -> Unit,
+    onCopy: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val isPaused = reminder.paused
@@ -79,6 +81,16 @@ fun ReminderRow(
                 isPaused ->
                     Text("בהשהיה", style = AppTypography.labelMedium, color = Neutral700)
             }
+        }
+
+        // Copy icon button
+        IconButton(onClick = onCopy, modifier = Modifier.size(34.dp)) {
+            Icon(
+                imageVector = Icons.Outlined.ContentCopy,
+                contentDescription = "העתק",
+                tint = iconTint,
+                modifier = Modifier.size(18.dp)
+            )
         }
 
         // Pause/Resume icon button
